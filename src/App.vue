@@ -12,7 +12,33 @@ export default {
   name: 'App',
   components: {
     HelloWorld
-  }
+  },
+  methods: {
+    getHours() {
+      fetch('http://localhost:3000/hour')
+        .then(res => res.json())
+        .then(res => {
+          console.log(res);
+        });
+    },
+    updateHour(id, action) {
+      const data = {
+        hourId: id,
+        action,
+      };
+      fetch('http://localhost:3000/hour', { 
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(() => this.getHours());
+    },
+  },
+  mounted() {
+    this.getHours();
+  },
 }
 </script>
 

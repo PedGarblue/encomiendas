@@ -1,17 +1,21 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HourBlock v-for="(hour, key) in hourlist" :key="key" :id="key" @appendItem="updateHour(key,'APPEND')"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HourBlock from './components/HourBlock.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HourBlock, 
+  },
+  data() {
+    return {
+      hourlist: {}, 
+    };
   },
   methods: {
     getHours() {
@@ -19,6 +23,7 @@ export default {
         .then(res => res.json())
         .then(res => {
           console.log(res);
+          this.hourlist = res;
         });
     },
     updateHour(id, action) {

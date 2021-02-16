@@ -8,7 +8,7 @@ const defaultData = {
 const createHourList = (data = defaultData, object = {}) => {
   const hour = Math.floor(data.start / 60);
   const minutes = data.start % 60;
-  const parsedTime = ('0' + (hour % 12)).slice(-2) + ':' + ('0' + minutes).slice(-2) + data.period[Math.floor(hour/12)];
+  const parsedTime = ('0' + ((hour === 12?12:hour % 12))).slice(-2) + ':' + ('0' + minutes).slice(-2) + data.period[Math.floor(hour/12)];
   const hourBlock = {
     items: 8,
   };

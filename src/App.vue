@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <HourBlock v-for="(hour, key) in hourlist" :key="key" :id="key" @appendItem="updateHour(key,'APPEND')"/>
+    <HourBlock v-for="(hour, key) in hourlist" :key="key" :id="key" @block-action="getHours"/>
   </div>
 </template>
 
@@ -25,20 +25,6 @@ export default {
           console.log(res);
           this.hourlist = res;
         });
-    },
-    updateHour(id, action) {
-      const data = {
-        hourId: id,
-        action,
-      };
-      fetch('http://localhost:3000/hour', { 
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-        .then(() => this.getHours());
     },
   },
   mounted() {

@@ -22,7 +22,7 @@ export const getHoursList = () => {
 
 export const freeItem = (hourid, itemid) => {
   const hours = getHoursList();
-  const hourBlock = hours[hourid];
+  const hourBlock = hours[hourid] || false;
   if (!hourBlock) throw new AppError(404, 'Hour block not found');
   const item = findItem(hourBlock.items, itemid);
 

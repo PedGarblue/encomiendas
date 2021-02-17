@@ -28,6 +28,7 @@ export const freeItem = (hourid, itemid) => {
 
   if (!item) throw new AppError(404, 'Item not found');
   item.avaliable = true;
+  hourBlock.avaliableItems += 1;
   mcache.put('hours', JSON.stringify(hours));
 };
 
@@ -39,6 +40,7 @@ export const appendItem = (hourid) => {
 
   let item = findItemAvaliable(hourBlock.items);
   item.avaliable = false;
+  hourBlock.avaliableItems -= 1;
   mcache.put('hours', JSON.stringify(hours));
   item.hourid = hourid;
 

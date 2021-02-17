@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <HourBlock v-for="(hour, key) in hourlist" :key="key" :id="key" @block-action="getHours"/>
+    <HourBlock 
+      v-for="(hour, key) in hourlist"
+      :key="key" 
+      :id="key"
+      :empty="hour.avaliableItems <= 0"
+      @block-action="getHours"/>
   </div>
 </template>
 

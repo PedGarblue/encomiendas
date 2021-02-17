@@ -20,8 +20,9 @@ const createHourList = (data = defaultData, object = {}) => {
   const minutes = data.start % 60;
   const hourId = ('0' + ((hour === 12?12:hour % 12))).slice(-2) + ':' + ('0' + minutes).slice(-2) + data.period[Math.floor(hour/12)];
   const hourBlock = {
-    items: createItems(), 
+    items: createItems([], 1), 
   };
+  hourBlock.avaliableItems = hourBlock.items.length;
   object[hourId] = hourBlock;
   data.start += data.interval;
   if(data.start > data.limit) return object;

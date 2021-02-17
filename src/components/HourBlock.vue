@@ -3,6 +3,9 @@
     <span>Horario: {{ id }} </span>
     <div class="botones">
       <button v-if="bikeId" @click="freeBike">Liberar</button>
+      <div v-else-if="empty">
+        No hay Motociclistas disponibles.
+      </div>
       <button v-else @click="requireBike">Pedir</button>
     </div>
   </div>
@@ -15,6 +18,12 @@ export default {
     id: {
       type: String,
       required: true,
+    },
+    empty: {
+      type: Boolean,
+      default() {
+        return false;
+      },
     },
   },
   data() {

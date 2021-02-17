@@ -4,14 +4,14 @@ import AppError from '../AppError';
 const findItemAvaliable = (itemList, i = 0) => {
   const item = itemList[i];
   if (item.avaliable) return item;
-  else if(i < itemList.length) return findItemAvaliable(itemList, i + 1);
+  else if(i <= itemList.length) return findItemAvaliable(itemList, i + 1);
   else return false;
 };
 
 const findItem = (itemList, itemId, i = 0) => {
   const item = itemList[i];
   if (item.id === itemId) return item;
-  else if(i < itemList.length) return findItem(itemList, i + 1);
+  else if(i < itemList.length - 1) return findItem(itemList, itemId, i + 1);
   else return false;
 };
 
@@ -24,7 +24,7 @@ export const freeItem = (hourid, itemid) => {
   const hours = getHoursList();
   const hourBlock = hours[hourid] || false;
   if (!hourBlock) throw new AppError(404, 'Hour block not found');
-  const item = findItem(hourBlock.items, itemid);
+  const item = findItem(hourBlock.items, itemid) || false;
 
   if (!item) throw new AppError(404, 'Item not found');
   item.avaliable = true;

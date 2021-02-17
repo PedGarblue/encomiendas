@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { saveBike, deleteBike, getBike } from '../utils/bike.storage.js';
+
 export default {
   name: 'HourBlock',
   props: {
@@ -28,7 +30,7 @@ export default {
   },
   data() {
     return {
-      bikeId: false,
+      bikeId: getBike(this.id),
     };
   },
   methods: {
@@ -47,6 +49,7 @@ export default {
         .then(resp => resp.json())
         .then(json => {
           this.bikeId = json.id;
+          saveBike(this.id, json);
         })
         .then(() => this.$emit('block-action'));
     },
@@ -64,6 +67,7 @@ export default {
         body: JSON.stringify(data),
       })
         .then(() => {
+          deleteBike(this.id);
           this.bikeId = false;
         })
         .then(() => this.$emit('block-action'));

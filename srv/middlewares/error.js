@@ -1,5 +1,5 @@
-import AppError from './AppError';
 import httpStatus from 'http-status';
+import AppError from '../utils/AppError';
 
 export const errorConverter = (err, req, res, next) => {
   let error = err;

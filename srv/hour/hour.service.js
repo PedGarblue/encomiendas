@@ -1,10 +1,10 @@
 import mcache from 'memory-cache';
-import AppError from '../AppError';
+import AppError from '../utils/AppError';
 
 const findItemAvaliable = (itemList, i = 0) => {
   const item = itemList[i];
   if (item.avaliable) return item;
-  else if(i <= itemList.length) return findItemAvaliable(itemList, i + 1);
+  else if(i < itemList.length - 1) return findItemAvaliable(itemList, i + 1);
   else return false;
 };
 

@@ -22,14 +22,14 @@ export default {
     message: {
       type: String,
       required: true,
-    }
+    },
   },
   methods: {
     close() {
       this.$emit('close');
-    }
+    },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -44,7 +44,6 @@ export default {
   justify-content: center;
   background-color: #00000017;
 }
-
 .box {
   background-color: #fff;
   padding: 1rem 5rem;

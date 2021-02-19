@@ -15,7 +15,9 @@
         @block-action="getHours"
         @block-error="showError"/>
     </div>
-    <FloatingMessage v-if="err" context="error" :message="err" @close="clearError"/>
+    <transition name="fade">
+      <FloatingMessage v-if="err" context="error" :message="err" @close="clearError"/>
+    </transition>
   </div>
 </template>
 
@@ -91,6 +93,23 @@ export default {
   .container {
     margin-left: 10rem;
     margin-right: 10rem;
+  }
+}
+
+.fade-enter-active {
+  animation: fade-in 0.1s;
+}
+.fade-leave-active {
+  animation: fade-in 0.1s reverse;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 </style>

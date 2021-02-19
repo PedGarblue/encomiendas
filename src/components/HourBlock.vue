@@ -39,19 +39,26 @@ export default {
         hourId: this.id,
         action: 'APPEND',
       };
-      fetch('http://192.168.1.103:3000/hour', { 
+      fetch('http://localhost:3000/hour', { 
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       })
-        .then(resp => resp.json())
+        .then(res => { 
+          if(!res.ok) return res.json()
+            .then(json => {
+              throw new Error(`${json.code}: ${json.message}`)
+            });
+          return res.json();
+        })
         .then(json => {
           this.bikeId = json.id;
           saveBike(this.id, json);
         })
-        .then(() => this.$emit('block-action'));
+        .catch(err => this.$emit('block-error', err))
+        .finally(() => this.$emit('block-action'));
     },
     freeBike() {
       const data = {
@@ -59,18 +66,27 @@ export default {
         itemId: this.bikeId,
         action: 'ADD',
       };
-      fetch('http://192.168.1.103:3000/hour', { 
+      fetch('http://localhost:3000/hour', { 
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       })
+        .then(res => { 
+          if(!res.ok) return res.json()
+            .then(json => {
+              deleteBike(this.id);
+              this.bikeId = false;
+              throw new Error(`${json.code}: ${json.message}`)
+            });
+        })
         .then(() => {
           deleteBike(this.id);
           this.bikeId = false;
         })
-        .then(() => this.$emit('block-action'));
+        .catch(err => this.$emit('block-error', err))
+        .finally(() => this.$emit('block-action'));
     },
   },
 }

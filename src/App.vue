@@ -6,7 +6,7 @@
         Seleccione un horario para solicitar a un motociclista
       </p>
     </div>
-    <div v-if="hourlist" class="container">
+    <div v-if="hourlist" class="container hour-list">
       <HourBlock 
         v-for="(hour, key) in hourlist"
         :key="key" 
@@ -80,8 +80,11 @@ export default {
   margin-right: 1rem;
 }
 
-.floating-error {
-  position: fixed;
+.hour-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (min-width: 600px) {

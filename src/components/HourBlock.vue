@@ -96,23 +96,27 @@ export default {
 .hour {
   padding: 1rem;
   border: 1px solid;
-  margin: 0.7rem 0;
+  margin: 0.7rem 0.3rem;
   border-radius: 0.3rem;
   background-color: #f9f9f9;
 }
 .hour-disabled {
  background-color: #fdb2b2;
 }
+
 button {
   border: none;
   padding: 0.4rem 1.6rem;
   border-radius: 0.3rem;
+  transition: 0.1s ease-in all;
+}
+button:hover {
+  opacity: 0.8;
 }
 .button-red {
   background-color: #f26464;
   color: white;
 }
-
 .button-green {
   background-color: #5caa51;
   color: white;

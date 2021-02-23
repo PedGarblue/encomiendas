@@ -1,4 +1,4 @@
-const getBikes = () => {
+export const getBikes = () => {
   const bikes = JSON.parse(localStorage.getItem('bikes'));
   return bikes || {};
 };

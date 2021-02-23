@@ -1,19 +1,22 @@
 <template>
   <div id="app">
+    <Navbar />
     <div>
-      <h1>Encomiendas</h1>
       <p>
         Seleccione un horario para solicitar a un motociclista
       </p>
     </div>
-    <div v-if="hourlist" class="container hour-list">
-      <HourBlock 
-        v-for="(hour, key) in hourlist"
-        :key="key" 
-        :id="key"
-        :empty="hour.avaliableItems <= 0"
-        @block-action="getHours"
-        @block-error="showError"/>
+    <div>
+      <section id="avaliable-items" class="container">
+        <div v-if="hourlist" class="hour-list">
+          <div v-for="(hour, hourid) in hourlist" :key="hourid">
+            <HourBlock 
+              v-if="hour.avaliableItems > 0"
+              :id="hourid"
+              @block-error="showError"/>
+          </div>
+        </div>
+      </section>
     </div>
     <transition name="fade">
       <FloatingMessage v-if="err" context="error" :message="err" @close="clearError"/>
@@ -22,31 +25,30 @@
 </template>
 
 <script>
-import HourBlock from './components/HourBlock.vue'
-import FloatingMessage from './components/FloatingMessage.vue'
+import Navbar from './components/Navbar.vue';
+import HourBlock from './components/HourBlock.vue';
+import FloatingMessage from './components/FloatingMessage.vue';
 
 export default {
   name: 'App',
   components: {
+    Navbar,
     HourBlock, 
     FloatingMessage,
   },
   data() {
     return {
-      hourlist: {}, 
       err: '',
     };
   },
+  computed: {
+    hourlist() {
+      return this.$root.getAvaliableBikes();
+    },
+  },
   methods: {
     getHours() {
-      fetch('http://localhost:3000/hour', {
-        mode: 'cors',
-        method: 'GET',
-      })
-        .then(res => res.json())
-        .then(res => {
-          this.hourlist = res;
-        })
+      this.$root.requestAvaliableBikes()
         .catch(err => {
           this.err = err.message;
         });
@@ -65,12 +67,23 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Satisfy&display=swap');
 :root {
+  --primary-color: #f26464;
   --text-color: #2c3e50;
 }
 
+body {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit; 
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -82,6 +95,14 @@ export default {
   margin-right: 1rem;
 }
 
+.flex {
+  display: flex;
+}
+
+.header-title {
+  font-family: 'Satisfy', cursive;
+  font-size: 2.5em;
+}
 .hour-list {
   display: flex;
   flex-direction: column;

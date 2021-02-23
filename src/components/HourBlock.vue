@@ -1,19 +1,15 @@
 <template>
-  <div class="hour" :class="{ 'hour-disabled': empty }">
+  <div class="hour">
     <span>Horario: {{ id }} </span>
     <div class="botones">
-      <button v-if="bikeId" @click="freeBike" class="button-green">Completar</button>
-      <div v-else-if="empty">
-        No hay Motociclistas disponibles.
-      </div>
-      <button v-else @click="requireBike" class="button-red">Solicitar</button>
+      <button @click="bikeAction" :class="{ green: isAvaliable, red: !isAvaliable }">
+        {{ isAvaliable ? 'Solicitar' : 'Completar' }}
+       </button>
     </div>
   </div>
 </template>
 
 <script>
-import { saveBike, deleteBike, getBike } from '../utils/bike.storage.js';
-
 export default {
   name: 'HourBlock',
   props: {
@@ -21,69 +17,34 @@ export default {
       type: String,
       required: true,
     },
-    empty: {
-      type: Boolean,
-      default() {
-        return false;
-      },
-    },
   },
   data() {
     return {
-      bikeId: getBike(this.id),
+      bike: this.$root.getUserBike(this.id),
     };
   },
+  computed: {
+    isAvaliable() {
+      return !this.bike;
+    },
+  },
   methods: {
+    bikeAction() {
+      if (this.isAvaliable) this.requireBike();
+      else this.freeBike();
+    },
     requireBike() {
-      const data = {
-        hourId: this.id,
-        action: 'APPEND',
-      };
-      fetch('http://localhost:3000/hour', { 
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-        .then(res => { 
-          if(!res.ok) return res.json()
-            .then(json => {
-              throw new Error(`${json.code}: ${json.message}`)
-            });
-          return res.json();
-        })
+      this.$root.addUserBike(this.id)
         .then(json => {
-          this.bikeId = json.id;
-          saveBike(this.id, json);
+          this.bike = json;
         })
         .catch(err => this.$emit('block-error', err))
         .finally(() => this.$emit('block-action'));
     },
     freeBike() {
-      const data = {
-        hourId: this.id,
-        itemId: this.bikeId,
-        action: 'ADD',
-      };
-      fetch('http://localhost:3000/hour', { 
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-        .then(res => { 
-          if(!res.ok) return res.json()
-            .then(json => {
-              deleteBike(this.id);
-              this.bikeId = false;
-              throw new Error(`${json.code}: ${json.message}`)
-            });
-        })
+      this.$root.freeUserBike(this.id)
         .then(() => {
-          deleteBike(this.id);
-          this.bikeId = false;
+          this.bike = false;
         })
         .catch(err => this.$emit('block-error', err))
         .finally(() => this.$emit('block-action'));
@@ -92,7 +53,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .hour {
   padding: 1rem;
   border: 1px solid;
@@ -113,11 +74,11 @@ button {
 button:hover {
   opacity: 0.8;
 }
-.button-red {
+button.red {
   background-color: #f26464;
   color: white;
 }
-.button-green {
+button.green {
   background-color: #5caa51;
   color: white;
 }

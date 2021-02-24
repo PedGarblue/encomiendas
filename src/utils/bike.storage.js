@@ -1,6 +1,6 @@
 export const getBikes = () => {
   const bikes = JSON.parse(localStorage.getItem('bikes'));
-  return bikes || {};
+  return bikes || [];
 };
 
 const saveBikes = bikes => {
@@ -8,23 +8,18 @@ const saveBikes = bikes => {
   localStorage.setItem('bikes', json);
 };
 
-export const saveBike = (hourId, data) => {
+export const saveBike = bike => {
   const bikes = getBikes();
-  bikes[hourId] = data;
+  bikes.push(bike);
   saveBikes(bikes);
 };
 
 export const deleteBike = hourId => {
   const bikes = getBikes();
-  if(bikes[hourId]) {
-    delete bikes[hourId];
-    saveBikes(bikes);
-  }
-  else console.warn(`Bike at ${hourId} not found`);
+  saveBikes(bikes.filter(bike => bike.hourId === hourId));
 };
 
 export const getBike = hourId => {
   const bikes = getBikes();
-  if(bikes[hourId]) return bikes[hourId];
-  return false;
+  return bikes.find(bike => bike.hourId === hourId);
 };

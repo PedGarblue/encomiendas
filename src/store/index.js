@@ -7,23 +7,28 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userBikes: getBikes(), 
-    avaliableBikes: {},
+    avaliableBikes: [],
   },
   getters: {
     getUserBikes: state => state.userBikes,
-    getUserBike: state => hourId => state.userBikes[hourId],
-    getAvaliableHours: state => state.avaliableBikes,
+    getUserBike: state => hourId => state.userBikes.find(bike => bike.id === hourId),
+    getAvaliableHours: state => {
+      return state.avaliableBikes
+        .filter(bike => !state.userBikes
+          .find(userBike => userBike.id === bike.id)
+         );
+    },
   },
   mutations: {
     setAvaliableHours: (state, bikes) => {
       state.avaliableBikes = bikes;
     },
     saveUserBike: (state, bike) => {
-      saveBike(bike.hourid, bike);     
+      saveBike(bike);     
       state.userBikes = getBikes();
     },
-    removeUserBike: (state, bike) => {
-      deleteBike(bike.hourid);
+    removeUserBike: (state, id) => {
+      deleteBike(id);
       state.userBikes = getBikes();
     },
   },
@@ -69,7 +74,7 @@ export default new Vuex.Store({
         },
         body: JSON.stringify({
           hourId,
-          itemId: bike.id,
+          itemId: bike.itemId,
           action: 'ADD',
         }),
       }).then(res => { 
@@ -77,7 +82,7 @@ export default new Vuex.Store({
             throw new Error(`${json.code}: ${json.message}`)
           });
         console.log(bike);
-        commit('removeUserBike', bike);
+        commit('removeUserBike', bike.itemId);
         dispatch('requestAvaliableHours');
       })
     },

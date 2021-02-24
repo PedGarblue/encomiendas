@@ -1,12 +1,12 @@
 <template>
 <div class="hour-list">
   <hour-block 
-    v-for="(bike, key) in bikes"
-    :key="key" 
-    :id="key"
-    :status="isOccupiedBike(key) ? 'occupied' : 'avaliable'"
-    @request-bike="requireBike(key)"
-    @return-bike="freeBike(key)"
+    v-for="bike in bikes"
+    :key="bike.id" 
+    :id="bike.id"
+    :status="isOccupiedBike(bike.id) ? 'occupied' : 'avaliable'"
+    @request-bike="requireBike(bike.id)"
+    @return-bike="freeBike(bike.id)"
   />
 </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   props: {
     bikes: {
-      type: Object,
+      type: Array,
       required: true,
     },
   },
@@ -32,7 +32,7 @@ export default {
   methods: {
     ...mapActions(['requestUserBike', 'freeUserBike']),
     isOccupiedBike(hourid) {
-      return !!this.getUserBikes[hourid];
+      return !!this.getUserBikes.find(bike => bike.id === hourid);
     },
     requireBike(hourid) {
       this.requestUserBike(hourid)

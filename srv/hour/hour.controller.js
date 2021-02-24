@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import { getHoursList, freeItem, appendItem } from './hour.service';
 
 export const getHours = (req, res) => {
-  const hours = getHoursList();
+  const hours = getHoursList({ onlyAvaliable: true });
   res.status(httpStatus.OK).json(hours);
 };
 

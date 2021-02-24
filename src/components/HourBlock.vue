@@ -3,13 +3,26 @@
     <span>Horario: {{ id }} </span>
     <div class="botones">
       <button @click="bikeAction" :class="{ green: isAvaliable, red: !isAvaliable }">
-        {{ isAvaliable ? 'Solicitar' : 'Completar' }}
+        {{ buttonStatus }}
        </button>
     </div>
   </div>
 </template>
 
 <script>
+const validStatus = ['avaliable', 'occupied', 'empty'];
+
+const actions = {
+  avaliable: 'request-bike',
+  occupied: 'return-bike',
+};
+
+const messages = {
+  avaliable: 'Solicitar',
+  occupied: 'Devolver',
+  empty: 'No disponible',
+};
+
 export default {
   name: 'HourBlock',
   props: {
@@ -17,37 +30,25 @@ export default {
       type: String,
       required: true,
     },
-  },
-  data() {
-    return {
-      bike: this.$root.getUserBike(this.id),
-    };
+    status: {
+      type: String,
+      required: true,
+      validator(value) {
+        return validStatus.includes(value);
+      },
+    }
   },
   computed: {
     isAvaliable() {
-      return !this.bike;
+      return this.status === 'avaliable';
+    },
+    buttonStatus() {
+      return messages[this.status];
     },
   },
   methods: {
     bikeAction() {
-      if (this.isAvaliable) this.requireBike();
-      else this.freeBike();
-    },
-    requireBike() {
-      this.$root.addUserBike(this.id)
-        .then(json => {
-          this.bike = json;
-        })
-        .catch(err => this.$emit('block-error', err))
-        .finally(() => this.$emit('block-action'));
-    },
-    freeBike() {
-      this.$root.freeUserBike(this.id)
-        .then(() => {
-          this.bike = false;
-        })
-        .catch(err => this.$emit('block-error', err))
-        .finally(() => this.$emit('block-action'));
+      if(this.status !== 'empty') this.$emit(actions[this.status]);
     },
   },
 }

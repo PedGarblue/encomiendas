@@ -11,13 +11,9 @@
               <div class="bike-list-header">
                 <span>Mis pedidos</span>
               </div>
-              <div v-if="bikeList" class="bike-list-contents">
-                <hour-block
-                  v-for="(bike, hour) in bikeList"
-                  :key="hour"
-                  :id="hour"
-                />
-              </div>
+              <bike-list
+                :bikes="getUserBikes"
+              />
           </div>
         </div>
       </div>
@@ -26,12 +22,13 @@
 </template>
 
 <script>
-import HourBlock from './HourBlock.vue';
+import { mapGetters } from 'vuex';
+import BikeList from './BikeList.vue';
 
 export default {
   name: 'MyBikes',
   components: {
-    HourBlock,
+    BikeList,
   },
   data() {
     return { 
@@ -39,10 +36,8 @@ export default {
     };
   },
   computed: {
-    bikeList() {
-      return this.$root.getUserBikes();
-    },
-  }
+    ...mapGetters(['getUserBikes']),
+  },
 }
 </script>
 

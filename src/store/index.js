@@ -1,40 +1,44 @@
-import { getBikes, saveBike, deleteBike } from './utils/bike.storage';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import { getBikes, saveBike, deleteBike } from '../utils/bike.storage';
 
-export default {
-  debug: true,
+Vue.use(Vuex)
+
+export default new Vuex.Store({
   state: {
-    userBikes: getBikes(),
+    userBikes: getBikes(), 
     avaliableBikes: {},
   },
-  methods: {
-    getUserBikes() {
-      return this.state.userBikes;
+  getters: {
+    getUserBikes: state => state.userBikes,
+    getUserBike: state => hourId => state.userBikes[hourId],
+    getAvaliableHours: state => state.avaliableBikes,
+  },
+  mutations: {
+    setAvaliableHours: (state, bikes) => {
+      state.avaliableBikes = bikes;
     },
-    getUserBike(hourId) {
-      return this.state.userBikes[hourId];
+    saveUserBike: (state, bike) => {
+      saveBike(bike.hourid, bike);     
+      state.userBikes = getBikes();
     },
-    getAvaliableBikes() {
-      return this.state.avaliableBikes;
+    removeUserBike: (state, bike) => {
+      deleteBike(bike.hourid);
+      state.userBikes = getBikes();
     },
-    saveUserBike(hourId, bike) {
-      saveBike(hourId, bike);
-      this.state.userBikes[hourId] = bike;
-    },
-    removeUserBike(hourId) {
-      deleteBike(hourId);
-      delete this.state.userBikes[hourId];
-    },
-    async requestAvaliableBikes() {
+  },
+  actions: {
+    async requestAvaliableHours({ commit }) {
       return fetch('http://localhost:3000/hour', {
         mode: 'cors',
         method: 'GET',
       })
         .then(res => res.json())
         .then(json => {
-          this.state.avaliableBikes = json;
+          commit('setAvaliableHours', json);
         });
     },
-    async addUserBike(hourId) {
+    async requestUserBike({ commit, dispatch }, hourId) {
       return fetch('http://localhost:3000/hour', { 
         method: 'PATCH',
         headers: {
@@ -49,14 +53,14 @@ export default {
         return res.json()
           .then(json => {
             if(!res.ok) throw new Error(`${json.code}: ${json.message}`);
-            this.saveUserBike(hourId, json);
-            this.requestAvaliableBikes();
+            commit('saveUserBike', json);
+            dispatch('requestAvaliableHours');
             return json;
           });
       })
     },
-    async freeUserBike(hourId) {
-      const bike = this.getUserBike(hourId);
+    async freeUserBike({ commit, dispatch, getters }, hourId) {
+      const bike = getters.getUserBike(hourId);
       if(!bike) return Promise.reject(new Error('User bike not found'));
       return fetch('http://localhost:3000/hour', { 
         method: 'PATCH',
@@ -72,9 +76,12 @@ export default {
         if(!res.ok) return res.json().then(json => {
             throw new Error(`${json.code}: ${json.message}`)
           });
-        this.removeUserBike(hourId);
-        this.requestAvaliableBikes();
+        console.log(bike);
+        commit('removeUserBike', bike);
+        dispatch('requestAvaliableHours');
       })
     },
   },
-};
+  modules: {
+  }
+})

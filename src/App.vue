@@ -8,14 +8,10 @@
     </div>
     <div>
       <section id="avaliable-items" class="container">
-        <div v-if="hourlist" class="hour-list">
-          <div v-for="(hour, hourid) in hourlist" :key="hourid">
-            <HourBlock 
-              v-if="hour.avaliableItems > 0"
-              :id="hourid"
-              @block-error="showError"/>
-          </div>
-        </div>
+        <bike-list 
+          :bikes="getAvaliableHours"
+          @list-error="showError"
+        />
       </section>
     </div>
     <transition name="fade">
@@ -25,15 +21,16 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import Navbar from './components/Navbar.vue';
-import HourBlock from './components/HourBlock.vue';
+import BikeList from './components/BikeList.vue';
 import FloatingMessage from './components/FloatingMessage.vue';
 
 export default {
   name: 'App',
   components: {
     Navbar,
-    HourBlock, 
+    BikeList, 
     FloatingMessage,
   },
   data() {
@@ -42,13 +39,12 @@ export default {
     };
   },
   computed: {
-    hourlist() {
-      return this.$root.getAvaliableBikes();
-    },
+    ...mapGetters(['getAvaliableHours']),
   },
   methods: {
+    ...mapActions(['requestAvaliableHours']),
     getHours() {
-      this.$root.requestAvaliableBikes()
+      this.requestAvaliableHours()
         .catch(err => {
           this.err = err.message;
         });
@@ -102,12 +98,6 @@ a {
 .header-title {
   font-family: 'Satisfy', cursive;
   font-size: 2.5em;
-}
-.hour-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 @media screen and (min-width: 600px) {

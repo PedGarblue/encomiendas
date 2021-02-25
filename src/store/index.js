@@ -82,7 +82,7 @@ export default new Vuex.Store({
             throw new Error(`${json.code}: ${json.message}`)
           });
         console.log(bike);
-        commit('removeUserBike', bike.itemId);
+        commit('removeUserBike', bike.id);
         dispatch('requestAvaliableHours');
       })
     },

@@ -10,6 +10,7 @@
       <section id="avaliable-items" class="container">
         <bike-list 
           :bikes="getAvaliableHours"
+          action="avaliable"
           @list-error="showError"
         />
       </section>

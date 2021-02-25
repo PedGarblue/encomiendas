@@ -13,6 +13,7 @@
               </div>
               <bike-list
                 :bikes="getUserBikes"
+                action="occupied"
               />
           </div>
         </div>

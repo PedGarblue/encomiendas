@@ -1,18 +1,20 @@
 <template>
 <div class="hour-list">
-  <hour-block 
-    v-for="bike in bikes"
-    :key="bike.id" 
-    :id="bike.id"
-    :status="isOccupiedBike(bike.id) ? 'occupied' : 'avaliable'"
-    @request-bike="requireBike(bike.id)"
-    @return-bike="freeBike(bike.id)"
-  />
+  <transition-group name="list">
+    <hour-block 
+      v-for="bike in bikes"
+      :key="bike.id" 
+      :id="bike.id"
+      :status="action"
+      @request-bike="requireBike(bike.id)"
+      @return-bike="freeBike(bike.id)"
+    />
+  </transition-group>
 </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import HourBlock from './HourBlock';
 
 export default {
@@ -25,24 +27,23 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  computed: {
-    ...mapGetters(['getUserBikes']),
+    action: {
+      type: String,
+      required: true,
+      validator() {
+        return ['occupied', 'avaliable'];
+      },
+    }
   },
   methods: {
     ...mapActions(['requestUserBike', 'freeUserBike']),
-    isOccupiedBike(hourid) {
-      return !!this.getUserBikes.find(bike => bike.id === hourid);
-    },
     requireBike(hourid) {
-      this.requestUserBike(hourid)
-        .then(() => this.isAvaliable = false)
+      return this.requestUserBike(hourid)
         .catch(err => this.$emit('list-error', err))
         .finally(() => this.$emit('list-action'));
     },
     freeBike(hourid) {
-      this.freeUserBike(hourid)
-        .then(() => this.isAvaliable = true)
+      return this.freeUserBike(hourid)
         .catch(err => this.$emit('list-error', err))
         .finally(() => this.$emit('list-action'));
     },
@@ -56,5 +57,23 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.list-move {
+  transition: all 0.5s;
+}
+.list-enter {
+  opacity: 0;
+  transform: translateX(10rem);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(-10rem);
+}
+.list-leave-active, .list-enter-active {
+  transition: all 0.5s;
+}
+.list-leave-active {
+  position: absolute;
 }
 </style>

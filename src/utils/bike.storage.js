@@ -14,9 +14,9 @@ export const saveBike = bike => {
   saveBikes(bikes);
 };
 
-export const deleteBike = hourId => {
+export const deleteBike = id => {
   const bikes = getBikes();
-  saveBikes(bikes.filter(bike => bike.hourId === hourId));
+  saveBikes(bikes.filter(bike => bike.id !== id));
 };
 
 export const getBike = hourId => {

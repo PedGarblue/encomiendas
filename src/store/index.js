@@ -81,7 +81,6 @@ export default new Vuex.Store({
         if(!res.ok) return res.json().then(json => {
             throw new Error(`${json.code}: ${json.message}`)
           });
-        console.log(bike);
         commit('removeUserBike', bike.id);
         dispatch('requestAvaliableHours');
       })

@@ -2,6 +2,9 @@
     <div>
       <button class="btn" @click="open = true">
         <img src="@/assets/scooter.svg" class="scooter-icon" />
+        <transition name="fade">
+          <span v-if="userHasItems" class="circle"></span>
+        </transition>
       </button>
       <transition name="slide">
         <div v-if="open" class="menu">
@@ -38,6 +41,9 @@ export default {
   },
   computed: {
     ...mapGetters(['getUserBikes']),
+    userHasItems() {
+      return this.getUserBikes.length > 0;
+    },
   },
 }
 </script>
@@ -65,6 +71,17 @@ export default {
   width: 2rem;
   height: 2rem;
   margin-bottom: 0.6rem;
+}
+
+.circle {
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: rgb(123, 236, 123);
+  border-radius: 50%;
+  position: relative;
+  left: -1.5rem;
+  top: 0.6rem;
+  margin-left: -0.8rem;
 }
 
 .menu {

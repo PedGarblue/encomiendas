@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getBikes, saveBike, deleteBike } from '../utils/bike.storage';
 
+const api_url = process.env.VUE_APP_API_URL;
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -34,7 +36,7 @@ export default new Vuex.Store({
   },
   actions: {
     async requestAvaliableHours({ commit }) {
-      return fetch('http://localhost:3000/hour', {
+      return fetch(`${api_url}/hour`, {
         mode: 'cors',
         method: 'GET',
       })
@@ -44,7 +46,7 @@ export default new Vuex.Store({
         });
     },
     async requestUserBike({ commit, dispatch }, hourId) {
-      return fetch('http://localhost:3000/hour', { 
+      return fetch(`${api_url}/hour`, { 
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +69,7 @@ export default new Vuex.Store({
     async freeUserBike({ commit, dispatch, getters }, hourId) {
       const bike = getters.getUserBike(hourId);
       if(!bike) return Promise.reject(new Error('User bike not found'));
-      return fetch('http://localhost:3000/hour', { 
+      return fetch(`${api_url}/hour`, { 
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

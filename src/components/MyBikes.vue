@@ -15,9 +15,13 @@
                 <span>Mis pedidos</span>
               </div>
               <bike-list
+                v-if="getUserBikes.length > 0"
                 :bikes="getUserBikes"
                 action="occupied"
               />
+              <div v-else class="bike-list-empty">
+                Ahora mismo no tienes ningún pedido reservado.
+              </div>
           </div>
         </div>
       </div>
@@ -101,10 +105,14 @@ export default {
 }
 
 .bike-list-header {
-  padding: 1rem 0;
+  padding: 1.23rem 0;
   background-color: var(--primary-color);
   color: white;
   font-weight: bold;
+}
+
+.bike-list-empty {
+  margin-top: 1rem;
 }
 
 .close-btn {

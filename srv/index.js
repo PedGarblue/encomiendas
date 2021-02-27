@@ -3,7 +3,7 @@ const app = require('./app.js');
 const logger = console;
 
 let server = app.listen(3000, () => {
-  logger.log('Listening to port 3000');
+  logger.log(`Listening to port 3000`);
 });
 
 const exitHandler = () => {

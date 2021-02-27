@@ -1,9 +1,10 @@
 const app = require('./app.js');
 
-const logger = console;
+const port = process.env.PORT || 3000
+if(process.env.PORT) console.log(`Using env port: ${process.env.PORT}`);
 
-let server = app.listen(3000, () => {
-  logger.log(`Listening to port 3000`);
+let server = app.listen(port, () => {
+  logger.log(`Listening to port ${port}`);
 });
 
 const exitHandler = () => {

@@ -1,5 +1,6 @@
 const app = require('./app.js');
 
+const logger = console;
 const port = process.env.PORT || 3000
 if(process.env.PORT) console.log(`Using env port: ${process.env.PORT}`);
 

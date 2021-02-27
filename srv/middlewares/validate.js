@@ -1,10 +1,10 @@
-import Joi from 'joi';
-import { pick } from '../utils/object.util';
-import AppError from '../utils/AppError';
+const Joi = require('joi');
+const obj = require('../utils/object.util.js');
+const AppError = require('../utils/AppError.js');
 
-export default schema => (req, res, next) => {
-  const validSchema = pick(schema, ['params', 'query', 'body']);
-  const object = pick(req, Object.keys(validSchema));
+module.exports = schema => (req, res, next) => {
+  const validSchema = obj.pick(schema, ['params', 'query', 'body']);
+  const object = obj.pick(req, Object.keys(validSchema));
   const { value, error } = Joi.compile(validSchema)
     .prefs({ errors: { label: 'key' } })
     .validate(object);

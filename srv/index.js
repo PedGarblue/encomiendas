@@ -1,16 +1,33 @@
-import express from 'express';
-import cors from 'cors';
-import mcache from 'memory-cache';
-import createHourList from './utils/createHourList';
-import routes from './routes';
-import { errorHandler, errorConverter } from './middlewares/error';
+const app = require('./app.js');
 
-export default app => {
-  const hourList = createHourList();
-  mcache.put('hours', JSON.stringify(hourList));
-  app.use(express.json());
-  app.use(cors({ origin : '*' }));
-  app.use(routes);
-  app.use(errorConverter);
-  app.use(errorHandler);
-}
+const logger = console;
+
+let server = app.listen(3000, () => {
+  logger.log('Listening to port 3000');
+});
+
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      logger.info('Server closed');
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+};
+
+const unexpectedErrorHandler = error => {
+  logger.error(error);
+  exitHandler();
+};
+
+process.on('uncaughtException', unexpectedErrorHandler);
+process.on('unhandledRejection', unexpectedErrorHandler);
+
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received');
+  if (server) {
+    server.close();
+  }
+});

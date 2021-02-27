@@ -1,5 +1,5 @@
-import mcache from 'memory-cache';
-import AppError from '../utils/AppError';
+const mcache = require('memory-cache');
+const AppError = require('../utils/AppError.js');
 
 const findItemAvaliable = itemList => {
   return itemList.find(item => item.avaliable);
@@ -9,13 +9,13 @@ const findItem = (itemList, itemId) => {
   return itemList.find(item => item.itemId === itemId);
 };
 
-export const getHoursList = (options = {}) => {
+const getHoursList = (options = {}) => {
   const hours = JSON.parse(mcache.get('hours'));
   if(options.onlyAvaliable) return hours.filter(hour => hour.avaliableItems > 0);
   return hours;
 };
 
-export const freeItem = (hourid, itemid) => {
+const freeItem = (hourid, itemid) => {
   const hours = getHoursList();
 
   const hourBlock = hours.find(hour => hour.id === hourid);
@@ -30,7 +30,7 @@ export const freeItem = (hourid, itemid) => {
   mcache.put('hours', JSON.stringify(hours));
 };
 
-export const appendItem = (hourid) => {
+const appendItem = (hourid) => {
   const hours = getHoursList();
 
   const hourBlock = hours.find(hour => hour.id === hourid);
@@ -44,4 +44,10 @@ export const appendItem = (hourid) => {
   item.id = hourid;
 
   return item;
+};
+
+module.exports = {
+  getHoursList,
+  freeItem,
+  appendItem,
 };

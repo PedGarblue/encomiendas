@@ -1,12 +1,12 @@
-import httpStatus from 'http-status';
-import { getHoursList, freeItem, appendItem } from './hour.service';
+const httpStatus = require('http-status');
+const { getHoursList, freeItem, appendItem } = require('./hour.service.js');
 
-export const getHours = (req, res) => {
+const getHours = (req, res) => {
   const hours = getHoursList({ onlyAvaliable: true });
   res.status(httpStatus.OK).json(hours);
 };
 
-export const updateHour = (req, res) => {
+const updateHour = (req, res) => {
   const { action, hourId, itemId } = req.body;
   let response;
 
@@ -18,4 +18,9 @@ export const updateHour = (req, res) => {
     response = appendItem(hourId);
     res.status(httpStatus.OK).json(response);
   }
+};
+
+module.exports = {
+ getHours,
+ updateHour,
 };

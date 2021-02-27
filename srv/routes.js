@@ -1,7 +1,7 @@
-import express from 'express';
-import validate from './middlewares/validate';
-import { getHours, updateHour } from './hour/hour.controller';
-import { updateHour as updateHourValidation } from './hour/hour.validation';
+const express = require('express');
+const  validate = require('./middlewares/validate.js');
+const { getHours, updateHour } = require('./hour/hour.controller.js');
+const { updateHour: updateHourValidation } = require('./hour/hour.validation.js');
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router
   .get(getHours)
   .patch(validate(updateHourValidation), updateHour);
 
-export default router;
+module.exports = router;

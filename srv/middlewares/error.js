@@ -1,7 +1,7 @@
-import httpStatus from 'http-status';
-import AppError from '../utils/AppError';
+const httpStatus = require('http-status');
+const AppError = require('../utils/AppError.js');
 
-export const errorConverter = (err, req, res, next) => {
+const errorConverter = (err, req, res, next) => {
   let error = err;
   if (!(error instanceof AppError)) {
     const statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
@@ -12,7 +12,7 @@ export const errorConverter = (err, req, res, next) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-export const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
 
   res.locals.errorMessage = err.message;
@@ -33,4 +33,9 @@ export const errorHandler = (err, req, res, next) => {
       res.send(response);
     },
   });
+};
+
+module.exports = {
+  errorConverter,
+  errorHandler,
 };

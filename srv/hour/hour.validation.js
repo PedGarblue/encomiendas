@@ -1,6 +1,6 @@
-import Joi from 'joi';
+const Joi = require('joi');
 
-export const updateHour = {
+const updateHour = {
   body: Joi.object().keys({
     action: Joi
       .string()
@@ -13,3 +13,7 @@ export const updateHour = {
       .number()
   }),
 };
+
+module.exports = {
+  updateHour,
+}

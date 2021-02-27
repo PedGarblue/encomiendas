@@ -30,4 +30,4 @@ const createHourList = (data = defaultData, array = []) => {
   return createHourList(data, array);
 };
 
-export default createHourList;
+module.exports = createHourList;

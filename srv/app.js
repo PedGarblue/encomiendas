@@ -10,6 +10,7 @@ mcache.put('hours', JSON.stringify(hourList));
 
 const app = express();
 
+app.use(express.static('dist'));
 app.use(express.json());
 app.use(cors({ origin : '*' }));
 app.use(routes);

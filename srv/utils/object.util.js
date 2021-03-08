@@ -5,6 +5,16 @@ const match = (object, matcher) => {
   return true;
 };
 
+const omit = (object, toOmit) => {
+  const result = {};
+  for (const key in object) {
+    if(!toOmit.includes(key)) {
+      result[key] = object[key];
+    }
+  }
+  return result;
+};
+
 const pick = (object, toPick) => {
   const result = {};
   for (const key in object) {
@@ -18,4 +28,5 @@ const pick = (object, toPick) => {
 module.exports = {
   match,
   pick,
+  omit,
 };

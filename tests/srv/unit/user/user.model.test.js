@@ -11,6 +11,7 @@ describe('User model', () => {
       newUser = {
         name: faker.name.findName(),
         password: 'password1',
+        role: 'user',
       };
     });
 
@@ -39,6 +40,7 @@ describe('User model', () => {
       const newUser = {
         name: faker.name.findName(),
         password: 'password1',
+        role: 'user',
       };
       expect(new User(newUser).toJSON()).not.toHaveProperty('password');
     });

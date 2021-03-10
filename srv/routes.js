@@ -1,13 +1,17 @@
 const express = require('express');
-const  validate = require('./middlewares/validate.js');
-const { getHours, updateHour } = require('./hour/hour.controller.js');
-const { updateHour: updateHourValidation } = require('./hour/hour.validation.js');
+const authRoute = require('./resources/auth/auth.route');
 
 const router = express.Router();
 
-router
-  .route('/hour')
-  .get(getHours)
-  .patch(validate(updateHourValidation), updateHour);
+const defaultRoutes = [
+  {
+    path: '/auth',
+    route: authRoute,    
+  },
+];
+
+defaultRoutes.forEach(route => {
+  router.use(route.path, route.route);
+});
 
 module.exports = router;

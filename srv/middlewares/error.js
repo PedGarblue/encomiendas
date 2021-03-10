@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const config = require('../config');
 const AppError = require('../utils/AppError.js');
 
 const errorConverter = (err, req, res, next) => {
@@ -20,10 +21,12 @@ const errorHandler = (err, req, res, next) => {
   const response = {
     code: statusCode,
     message,
-    stack: err.stack,
   };
 
-  console.log(err);
+  if(config.env === 'development'){
+    response.stack = err.stack;
+    console.log(err);
+  }
 
   res.status(statusCode).format({
     json: () => {

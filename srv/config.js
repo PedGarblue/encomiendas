@@ -9,7 +9,7 @@ if(fs.existsSync(envPath)) dotenv.config({ envPath });
 const roles = ['admin', 'user'];
 const roleRights = new Map();
 
-roleRights.set(roles[0], ['manageBikes']);
+roleRights.set(roles[0], ['userData', 'manageBikes']);
 roleRights.set(roles[1], ['useBikes']);
 
 module.exports = {

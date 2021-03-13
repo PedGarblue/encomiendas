@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const mcache = require('memory-cache');
+const httpStatus = require('http-status');
 const passport = require('passport');
 const createHourList = require('./utils/createHourList');
 const { jwtStrategy } = require('./passport');
 const routes = require('./routes');
 const { errorHandler, errorConverter } = require('./middlewares/error');
+const AppError = require('./utils/AppError');
 
 const hourList = createHourList();
 mcache.put('hours', JSON.stringify(hourList));

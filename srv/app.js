@@ -25,6 +25,9 @@ app.use(cors({ origin : '*' }));
 // routes
 app.use('/api', routes);
 
+app.use((req, res, next) => {
+  next(new AppError(httpStatus.NOT_FOUND, 'Not found'));
+});
 // error handling
 app.use(errorConverter);
 app.use(errorHandler);

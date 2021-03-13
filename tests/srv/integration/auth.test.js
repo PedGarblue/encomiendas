@@ -2,12 +2,14 @@ const request = require('supertest');
 const httpStatus = require('http-status');
 const httpMocks = require('node-mocks-http');
 const moment = require('moment');
+const faker = require('faker');
 
 const app = require('@/srv/app');
 const config = require('@/srv/config');
 const AppError = require('@/srv/utils/AppError');
 const auth = require('@/srv/middlewares/auth');
 const Token = require('@/srv/resources/token/token.model');
+const User = require('@/srv/resources/user/user.model');
 const tokenService = require('@/srv/resources/token/token.service');
 const setupTestDB = require('../utils/setupTestDB');
 const { userOne, admin, insertUsers } = require('../fixtures/user.fixture');
@@ -16,6 +18,56 @@ const { userOneAccessToken, adminAccessToken } = require('../fixtures/token.fixt
 setupTestDB();
 
 describe('Auth routes', () => {
+  describe('POST /auth/register', () => {
+    let newUser;
+    beforeEach(() => {
+      newUser = {
+        name: faker.name.findName(),
+        password: 'password1',
+      };
+    });
+
+    test('should return 201 and successfully register user if request data is ok', async () => {
+      const res = await request(app).post('/api/auth/register').send(newUser).expect(httpStatus.CREATED);
+
+      expect(res.body.user).not.toHaveProperty('password');
+      expect(res.body.user).toEqual({ id: expect.anything(), name: newUser.name, role: 'user' });
+
+      const dbUser = await User.findById(res.body.user.id);
+      expect(dbUser).toBeDefined();
+      expect(dbUser.password).not.toBe(newUser.password);
+      expect(dbUser).toMatchObject({ name: newUser.name,  role: 'user' });
+
+      expect(res.body.tokens).toEqual({
+        access: { token: expect.anything(), expires: expect.anything() },
+        refresh: { token: expect.anything(), expires: expect.anything() },
+      });
+    });
+
+    test('should return 400 error if name is already used', async () => {
+      await insertUsers([userOne]);
+      newUser.name = userOne.name;
+
+      await request(app).post('/api/auth/register').send(newUser).expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 400 error if password length is less than 8 characters', async () => {
+      newUser.password = 'passwo1';
+
+      await request(app).post('/api/auth/register').send(newUser).expect(httpStatus.BAD_REQUEST);
+    });
+
+    test('should return 400 error if password does not contain both letters and numbers', async () => {
+      newUser.password = 'password';
+
+      await request(app).post('/api/auth/register').send(newUser).expect(httpStatus.BAD_REQUEST);
+
+      newUser.password = '11111111';
+
+      await request(app).post('/api/auth/register').send(newUser).expect(httpStatus.BAD_REQUEST);
+    });
+  });
+
   describe('POST /auth/login', () => {
     test('should return 200 and login user if name and password match', async () => {
       await insertUsers([userOne]);
@@ -32,6 +84,7 @@ describe('Auth routes', () => {
       expect(res.body.user).toEqual({
         id: expect.anything(),
         name: userOne.name,
+        role: userOne.role, 
       });
 
       expect(res.body.tokens).toEqual({

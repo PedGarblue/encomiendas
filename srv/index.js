@@ -3,14 +3,13 @@ const config = require('./config');
 const mongoose = require('mongoose');
 
 const logger = console;
-if(process.env.PORT) console.log(`Using env port: ${process.env.PORT}`);
 
 let server; 
 
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info('Connected to MongoDB');
   server = app.listen(config.port, () => {
-    logger.log(`Listening to port ${port}`);
+    logger.log(`Listening to port ${config.port}`);
   });
 });
 

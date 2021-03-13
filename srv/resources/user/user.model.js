@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema(
       role: {
         type: String,
         required: true,
+        default: 'user',
         enum: ['admin', 'user'],
       },
     },
@@ -40,7 +41,7 @@ const userSchema = mongoose.Schema(
   
   userSchema.methods.transform = function() {
     const user = this;
-    return pick(user.toJSON(), ['id', 'name']);
+    return pick(user.toJSON(), ['id', 'name', 'role']);
   };
   
   userSchema.pre('save', async function(next) {

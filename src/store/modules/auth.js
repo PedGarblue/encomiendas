@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import request from '@/src/utils/request';
+import request from '../../utils/request';
 import {
   AUTH_LOGIN,
   AUTH_LOGOUT,
@@ -51,7 +51,7 @@ const actions = {
         });
     });
   },
-  async [AUTH_REGISTER]({ state, dispatch, commit }, payload) {
+  async [AUTH_REGISTER]({ dispatch, commit }, payload) {
     commit(AUTH_REQUEST);
 
     return new Promise((resolve, reject) => {
@@ -127,7 +127,7 @@ const mutations = {
     state.status = 'error';
     state.hasLoadedOnce = true;
   },
-  [AUTH_LOGIN]: (state) => {
+  [AUTH_LOGIN]: (state, tokens) => {
     state.tokens = tokens;
     state.hasLoadedOnce = true;
   },

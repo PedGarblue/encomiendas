@@ -4,6 +4,7 @@ module.exports = {
   testEnvironmentOptions: {
     NODE_ENV: 'test',
     VUE_APP_API_URL: 'http://localhost:3000',
+    VUE_APP_BASE_URL: 'http://localhost:3001',
   },
   restoreMocks: true,
   moduleFileExtensions: ['js', 'json', 'vue'],

@@ -3,7 +3,7 @@ import axios from 'axios';
 const debug = process.env.NODE_ENV === 'development';
 
 const client = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: process.env.VUE_APP_BASE_URL,
 })
 
 const onSuccess = response => {

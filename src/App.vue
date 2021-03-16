@@ -1,24 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <div>
-      <p>
-        Seleccione un horario para solicitar a un motociclista
-      </p>
-    </div>
-    <div>
-      <section id="avaliable-items" class="container">
-        <bike-list 
-          v-if="getAvaliableHours.length > 0"
-          :bikes="getAvaliableHours"
-          action="avaliable"
-          @list-error="showError"
-        />
-        <div v-else class="avaliable-items-empty">
-          No hay motociclistas disponibles, intente más tarde.
-        </div>
-      </section>
-    </div>
+    <router-view></router-view>
     <transition name="fade">
       <FloatingMessage v-if="err" context="error" :message="err" @close="clearError"/>
     </transition>
@@ -26,43 +9,19 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
 import Navbar from './components/Navbar.vue';
-import BikeList from './components/BikeList.vue';
 import FloatingMessage from './components/FloatingMessage.vue';
 
 export default {
   name: 'App',
   components: {
     Navbar,
-    BikeList, 
     FloatingMessage,
   },
   data() {
     return {
       err: '',
     };
-  },
-  computed: {
-    ...mapGetters(['getAvaliableHours']),
-  },
-  methods: {
-    ...mapActions(['requestAvaliableHours']),
-    getHours() {
-      this.requestAvaliableHours()
-        .catch(err => {
-          this.err = err.message;
-        });
-    },
-    showError(err) {
-      this.err = err;
-    },
-    clearError() {
-      this.err = '';
-    },
-  },
-  mounted() {
-    this.getHours();
   },
 }
 </script>

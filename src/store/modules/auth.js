@@ -47,7 +47,7 @@ const actions = {
         .catch(err => {
           localStorage.removeItem('user-token'); // if the request fails, remove any possible user token if possible
           commit(AUTH_ERROR);
-          reject(err);
+          reject(err.message);
         });
     });
   },
@@ -69,7 +69,7 @@ const actions = {
         .catch(err => {
           localStorage.removeItem('user-token');
           commit(AUTH_ERROR);
-          reject(err);
+          reject(err.message);
         });
     });
   },
@@ -86,7 +86,7 @@ const actions = {
         .catch(err => {
           localStorage.removeItem('user-token'); // if the request fails, remove any possible user token if possible
           commit(AUTH_LOGOUT);
-          reject(err);
+          reject(err.message);
         });
     });
   },

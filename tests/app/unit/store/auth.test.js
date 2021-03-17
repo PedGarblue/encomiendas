@@ -70,8 +70,9 @@ describe('Auth Global Store', () => {
       });
 
       test('should remove user token and commit error on login request failure', async () => {
-        request.mockRejectedValue(new Error('some error'));
-        await expect(authStore.actions[AUTH_LOGIN](stateModules, userLogin)).rejects.toThrow();
+        const response = { code: 400, message: 'Bad Request' };
+        request.mockRejectedValue(response);
+        await expect(authStore.actions[AUTH_LOGIN](stateModules, userLogin)).rejects.toEqual(response.message);
         expect(stateModules.commit).toBeCalledWith('AUTH_ERROR');
         expect(Storage.prototype.removeItem).toBeCalledWith('user-token');
       });
@@ -119,8 +120,9 @@ describe('Auth Global Store', () => {
       });
 
       test('should remove user token and commit error on login request failure', async () => {
-        request.mockRejectedValue(new Error('some error'));
-        await expect(authStore.actions[AUTH_REFRESH_TOKENS](stateModules)).rejects.toThrow();
+        const response = { code: 400, message: 'Bad Request' };
+        request.mockRejectedValue(response);
+        await expect(authStore.actions[AUTH_REFRESH_TOKENS](stateModules)).rejects.toEqual(response.message);
         expect(stateModules.commit).toBeCalledWith('AUTH_LOGOUT');
         expect(Storage.prototype.removeItem).toBeCalledWith('user-token');
       });

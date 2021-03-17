@@ -41,9 +41,9 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.VUE_APP_BASE_URL,
-  routes
-})
+  base: '/',
+  routes,
+});
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page

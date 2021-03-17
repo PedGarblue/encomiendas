@@ -3,7 +3,7 @@ import axios from 'axios';
 const debug = process.env.NODE_ENV === 'development';
 
 const client = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  baseURL: process.env.VUE_APP_API_URL,
 })
 
 const onSuccess = response => {
@@ -23,7 +23,7 @@ const onError = error => {
       console.error(`Request message: ${error.message}`);
     }
   }
-  Promise.reject(response ? response.data: error);
+  return Promise.reject(response ? response.data: error);
 };
 
 export default options => {

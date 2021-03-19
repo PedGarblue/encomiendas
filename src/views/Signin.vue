@@ -9,15 +9,33 @@
           <form @submit.prevent="register">
             <div class="form-group">
               <label for="username">Usuario</label>
-              <input v-model="user.name" name="username" type="text" required>
+              <input
+                v-model="user.name"
+                name="username"
+                type="text"
+                required
+                autocomplete="username"
+              >
             </div>
             <div class="form-group">
               <label for="password">Contraseña</label>
-              <input v-model="user.password" name="password" type="password" required>
+              <input
+                v-model="user.password"
+                name="password"
+                type="password"
+                required
+                autocomplete="new-password"
+              >
             </div>
             <div class="form-group">
               <label for="password-repeat">Repita su contraseña</label>
-              <input v-model="user.repeatpass" name="password-repeat" type="password" required>
+              <input
+                v-model="user.repeatpass"
+                name="password-repeat"
+                type="password"
+                required
+                autocomplete="new-password"
+              >
             </div>
             <div class="form-buttons">
               <button type="submit" class="btn btn-primary">Registrarse</button>

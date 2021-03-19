@@ -9,11 +9,23 @@
           <form @submit.prevent="login">
             <div class="form-group">
               <label for="username">Usuario</label>
-              <input v-model="user.name" name="username" type="username" required>
+              <input 
+                v-model="user.name"
+                name="username"
+                type="text"
+                required
+                autocomplete="username"
+              >
             </div>
             <div class="form-group">
               <label for="password">Contraseña</label>
-              <input v-model="user.password" name="password" type="password" required>
+              <input
+                v-model="user.password"
+                name="password"
+                type="password"
+                required
+                autocomplete="current-password"
+              >
             </div>
             <div v-if="message" class="message">
               {{ message }}

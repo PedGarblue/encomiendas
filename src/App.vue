@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <Navbar />
-    <router-view></router-view>
+      <transition name="fade" mode="out-in">
+        <router-view v-if="showView"></router-view>
+        <div v-else>
+          <h2>Cargando...</h2>
+        </div>
+      </transition>
     <transition name="fade">
       <FloatingMessage v-if="err" context="error" :message="err" @close="clearError"/>
     </transition>
@@ -9,8 +14,10 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import Navbar from './components/Navbar.vue';
 import FloatingMessage from './components/FloatingMessage.vue';
+import { USER_REQUEST } from './store/actions/user';
 
 export default {
   name: 'App',
@@ -23,6 +30,28 @@ export default {
       err: '',
     };
   },
+  computed: {
+    ...mapGetters(['isProfileLoaded', 'isAuthenticated']),
+    showView() {
+      console.log(this.isProfileLoaded || !this.isAuthenticated)
+      return this.isProfileLoaded || !this.isAuthenticated;
+    }
+  },
+  methods: {
+    ...mapActions([USER_REQUEST]),
+    loadUser() {
+      this[USER_REQUEST]()
+        .catch(err => {
+          this.err = err;
+        });
+    },
+    clearError(){
+      this.err = '';
+    }
+  },
+  mounted() {
+    if(this.isAuthenticated) this.loadUser();
+  }
 }
 </script>
 
@@ -30,18 +59,16 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Satisfy&display=swap');
 :root {
   --primary-color: #f26464;
+  --secondary-color: #6eb2eb;
   --text-color: #2c3e50;
 }
-
 body {
   margin: 0;
 }
-
 a {
   text-decoration: none;
   color: inherit; 
 }
-
 #app {
   font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -49,6 +76,8 @@ a {
   text-align: center;
   color: var(--text-color);
 }
+
+/* Containers and flex */
 
 .container {
   margin-left: 1rem;
@@ -59,9 +88,78 @@ a {
   display: flex;
 }
 
-.header-title {
-  font-family: 'Satisfy', cursive;
-  font-size: 2.5em;
+/* Margin */
+
+.margin-s-x { /* margin small top and bottom */
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.margin-s-y { /* margin small left and right */
+  margin-left: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.margin-s-t { /* margin small top*/
+  margin-top: 0.25rem;
+}
+
+.margin-s-b { /* margin small bottom */
+  margin-bottom: 0.25rem;
+}
+
+.margin-s-l { /* margin small left */
+  margin-left: 0.25rem;
+}
+
+.margin-s-r { /* margin small right */
+  margin-right: 0.25rem;
+}
+
+/* Cards */
+
+.card {
+  border: 0.15rem solid;
+  border-radius: 0.15rem;
+  max-width: 30rem;
+  margin: 2rem auto;
+}
+.card-body {
+  padding: 1rem 2rem;
+}
+.card-footer {
+  padding: 1rem;
+}
+
+/* Forms */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  text-align: left;
+}
+.form-buttons {
+  margin: 1rem 0;
+}
+.form-buttons .btn{
+  margin: 0.25rem 0;
+}
+
+.btn {
+  border: none;
+  padding: 1rem;
+  font-size: 1rem;
+  width: 100%;
+}
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
 }
 
 @media screen and (min-width: 600px) {
@@ -71,11 +169,13 @@ a {
   }
 }
 
+/* Animations and transitions */
+
 .fade-enter-active {
-  animation: fade-in 0.1s;
+  animation: fade-in 0.5s;
 }
 .fade-leave-active {
-  animation: fade-in 0.1s reverse;
+  animation: fade-in 0.5s reverse;
 }
 
 @keyframes fade-in {

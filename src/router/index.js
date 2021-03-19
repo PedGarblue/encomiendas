@@ -10,31 +10,22 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: {
-      // allowed to all users
-      isAuthenticated: true,
-    },
+    meta: {},
   },
   {
     path: '/login',
     name: 'Login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     meta: {
-      allowUnauthenticated: true,
+      onlyUnauthenticated: true,
     },
   },
   {
     path: '/register',
     name: 'Signin',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Signin.vue'),
+    component: () => import(/* webpackChunkName: "signin" */ '../views/Signin.vue'),
     meta: {
-      allowUnauthenticated: true,
+      onlyUnauthenticated: true,
     },
   },
 ]
@@ -47,13 +38,15 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const { authorize, allowUnauthenticated } = to.meta;
+  const { authorize, onlyUnauthenticated } = to.meta;
   const currentUser = store.getters.getProfile;
   const { isAuthenticated } = store.getters;
-  if (!isAuthenticated && !allowUnauthenticated) {
+  if (!isAuthenticated && !onlyUnauthenticated) {
     // not logged in so redirect to login page with the return url
     return next({ path: '/login' });
   }
+  // redirect user if route is unauthenticated only
+  if(isAuthenticated && onlyUnauthenticated) return next({ path: '/' });
   if (authorize) {
     // check if route is restricted by role
     if (authorize.length && !authorize.includes(currentUser.role)) {

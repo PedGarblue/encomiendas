@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
-import Vue from 'vue';
 import request from '../../utils/request';
 import { USER_REQUEST, USER_ERROR, USER_SUCCESS, USER_LOGOUT } from '../actions/user';
 import { AUTH_LOGOUT } from '../actions/auth';
 
+const unauthenticatedUser = { role: 'unauthenticated' };
+
 const state = {
   status: '',
-  profile: JSON.parse(sessionStorage.getItem('user')) || {},
+  profile: JSON.parse(sessionStorage.getItem('user')) || unauthenticatedUser,
   hasLoadedOnce: false,
 };
 
@@ -39,9 +40,10 @@ const actions = {
         });
     });
   },
-  [USER_LOGOUT]: ({ commit }) => {
+  [USER_LOGOUT]: ({ commit, dispatch }) => {
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
+    dispatch(AUTH_LOGOUT);
     commit(USER_LOGOUT);
   },
 };
@@ -53,13 +55,13 @@ const mutations = {
   [USER_SUCCESS]: (state, resp) => {
     state.status = 'success';
     state.hasLoadedOnce = true;
-    Vue.set(state, 'profile', resp);
+    state.profile = resp;
   },
   [USER_ERROR]: state => {
     state.status = 'error';
   },
   [USER_LOGOUT]: state => {
-    state.profile = {};
+    state.profile = unauthenticatedUser;
     state.status = '';
   },
 };

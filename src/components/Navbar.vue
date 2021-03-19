@@ -5,19 +5,29 @@
       <span>Encomiendas</span>
     </a>
     <div class="flex items">
-      <MyBikes />
+      <button v-if="isAuthenticated" @click="logout" class="btn btn-primary">Log out</button>
     </div>
   </nav>
 </template>
 
 <script>
-import MyBikes from './MyBikes.vue';
+import { mapActions, mapGetters } from 'vuex';
+import { USER_LOGOUT } from '../store/actions/user';
 
 export default {
   name: 'Navbar',
-  components: {
-    MyBikes,
+  computed: {
+    ...mapGetters(['isAuthenticated']),
   },
+  methods: {
+    ...mapActions([USER_LOGOUT]),
+    logout() {
+      this[USER_LOGOUT]()
+        .then(() => {
+          this.$router.push({ name: 'Login' });
+        })
+    },
+  }
 }
 </script>
 

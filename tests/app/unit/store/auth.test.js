@@ -10,7 +10,6 @@ import {
   AUTH_LOGOUT,
 } from '@/src/store/actions/auth';
 
-import { USER_REQUEST, USER_LOGOUT } from '@/src/store/actions/user';
 import { tokens } from '@/tests/app/fixtures/store.fixture';
 
 jest.mock('@/src/utils/request');
@@ -65,8 +64,7 @@ describe('Auth Global Store', () => {
       test('should commit AUTH_SUCCESS and dispatch USER_REQUEST, AUTH_AUTO_REFRESH_TOKENS', async () => {
         await authStore.actions[AUTH_LOGIN](stateModules, userLogin);
         expect(stateModules.commit).toBeCalledWith('AUTH_LOGIN', resolve.tokens);
-        expect(stateModules.dispatch).nthCalledWith(1, USER_REQUEST, resolve.user);
-        expect(stateModules.dispatch).nthCalledWith(2, AUTH_AUTO_REFRESH_TOKENS);
+        expect(stateModules.dispatch).nthCalledWith(1, AUTH_AUTO_REFRESH_TOKENS);
       });
 
       test('should remove user token and commit error on login request failure', async () => {
@@ -147,10 +145,9 @@ describe('Auth Global Store', () => {
     });
 
     describe('AUTH_LOGOUT', () => {
-      test('should commit USER_LOGOUT and dispatch USER_LOGOUT', async () => {
+      test('should commit AUTH_LOGOUT', async () => {
         await authStore.actions[AUTH_LOGOUT](stateModules);
         expect(stateModules.commit).toBeCalledWith(AUTH_LOGOUT);
-        expect(stateModules.dispatch).toBeCalledWith(USER_LOGOUT);
       });
 
       test('should delete user token and the auto refresh token task', async () => {

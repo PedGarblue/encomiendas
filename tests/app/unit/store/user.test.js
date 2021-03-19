@@ -32,6 +32,18 @@ describe('User Global Store', () => {
     request.mockClear();
   });
 
+  describe('State', () => {
+    it('initializes with correct values', () => {
+      expect(userStore.state).toEqual({
+        status: '',
+        profile: {
+          role: 'unauthenticated',
+        },
+        hasLoadedOnce: false,
+      });
+    })
+  });
+
   describe('Actions', () => {
     let user;
 
@@ -79,11 +91,12 @@ describe('User Global Store', () => {
     });
 
     describe('USER_LOGOUT', () => {
-      test('should delete all user data', () => {
+      test('should delete all user data and dispatch AUTH_LOGOUT', () => {
         userStore.actions[USER_LOGOUT](stateModules);
         expect(Storage.prototype.removeItem.mock.calls[0]).toEqual(['user']);
         expect(Storage.prototype.removeItem.mock.calls[1]).toEqual(['user']);
         expect(stateModules.commit).toBeCalledWith(USER_LOGOUT);
+        expect(stateModules.dispatch).toBeCalledWith(AUTH_LOGOUT);
       });
     });
   });

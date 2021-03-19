@@ -7,7 +7,6 @@ import {
   AUTH_AUTO_REFRESH_TOKENS,
   AUTH_REGISTER,
 } from '../actions/auth';
-import { USER_REQUEST, USER_LOGOUT } from '../actions/user';
 
 const AUTH_REQUEST = 'AUTH_REQUEST';
 const AUTH_SUCCESS = 'AUTH_SUCCESS';
@@ -38,11 +37,10 @@ const actions = {
           const { tokens, user } = resp;
           commit(AUTH_SUCCESS);
           commit(AUTH_LOGIN, tokens);
-          dispatch(USER_REQUEST, user);
           dispatch(AUTH_AUTO_REFRESH_TOKENS);
           localStorage.setItem('user-token', JSON.stringify(tokens));
 
-          resolve(resp);
+          resolve({ tokens, user });
         })
         .catch(err => {
           localStorage.removeItem('user-token'); // if the request fails, remove any possible user token if possible
@@ -60,11 +58,10 @@ const actions = {
           const { tokens, user } = resp;
           commit(AUTH_SUCCESS);
           commit(AUTH_LOGIN, tokens);
-          dispatch(USER_REQUEST, user);
           dispatch(AUTH_AUTO_REFRESH_TOKENS);
           localStorage.setItem('user-token', JSON.stringify(tokens));
 
-          resolve(resp);
+          resolve({ tokens, user });
         })
         .catch(err => {
           localStorage.removeItem('user-token');
@@ -105,9 +102,8 @@ const actions = {
     );
     commit(AUTH_REFRESH_TOKEN_TASK, refreshTask);
   },
-  [AUTH_LOGOUT]: ({ state, commit, dispatch }) => {
+  [AUTH_LOGOUT]: ({ state, commit }) => {
     return new Promise(resolve => {
-      dispatch(USER_LOGOUT);
       commit(AUTH_LOGOUT);
       localStorage.removeItem('user-token');
       clearTimeout(state.refreshTokenTask);

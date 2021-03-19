@@ -8,7 +8,7 @@ const client = axios.create({
 
 const onSuccess = response => {
   if(debug) console.log(`Request successful: ${response}`);
-  return response;
+  return response.data;
 };
 
 const onError = error => {

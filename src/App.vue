@@ -33,7 +33,6 @@ export default {
   computed: {
     ...mapGetters(['isProfileLoaded', 'isAuthenticated']),
     showView() {
-      console.log(this.isProfileLoaded || !this.isAuthenticated)
       return this.isProfileLoaded || !this.isAuthenticated;
     }
   },

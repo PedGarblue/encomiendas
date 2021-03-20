@@ -5,7 +5,12 @@
       <span>Encomiendas</span>
     </a>
     <div class="flex items">
-      <button v-if="isAuthenticated" @click="logout" class="btn btn-primary">Log out</button>
+      <div v-if="isProfileLoaded" class="flex">
+        <button @click="logout" class="btn btn-primary">Log out</button>
+        <div class="flex user">
+          <span class="user__name" :title="getProfile.role">{{ getProfile.name }}</span>
+        </div>
+      </div>
     </div>
   </nav>
 </template>
@@ -17,7 +22,7 @@ import { USER_LOGOUT } from '../store/actions/user';
 export default {
   name: 'Navbar',
   computed: {
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters(['isProfileLoaded', 'getProfile']),
   },
   methods: {
     ...mapActions([USER_LOGOUT]),
@@ -57,5 +62,17 @@ nav {
 
 .item {
   height: 100%;
+}
+
+.user {
+  align-items: center;
+  padding: 0 1rem;
+}
+.user__name {
+  font-weight: bolder;
+  background-color: var(--secondary-color);
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  cursor: default;
 }
 </style>

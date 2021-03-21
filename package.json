@@ -62,7 +62,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {},
+    "rules": {
+      "indent": ["warning", 2]
+    },
     "overrides": [
       {
         "files": [

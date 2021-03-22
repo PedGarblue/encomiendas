@@ -7,6 +7,7 @@ const Delivery = require('@/srv/resources/delivery/delivery.model');
 const setupTestDB = require('../utils/setupTestDB');
 const { bikeOne, insertBikes } = require('../fixtures/bike.fixture');
 const { userOne, insertUsers } = require('../fixtures/user.fixture');
+const { deliveryOne, insertDeliveries } = require('../fixtures/delivery.fixture');
 const { userOneAccessToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
@@ -100,6 +101,11 @@ describe('Delivery routes', () => {
 
     it('returns 404 if there is no bikes avaliable', async () => {
       await insertUsers([userOne]);
+      await insertBikes([bikeOne]);
+      await insertDeliveries([deliveryOne]);
+
+      newDelivery.hour = deliveryOne.hour;
+      
       const resp = await request(app)
         .post('/api/delivery')
         .set('Authorization', `Bearer ${userOneAccessToken}`)

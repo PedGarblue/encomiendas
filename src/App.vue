@@ -60,6 +60,10 @@ export default {
   --primary-color: #f26464;
   --secondary-color: #6eb2eb;
   --text-color: #2c3e50;
+  --small: 0.25rem;
+  --medium: 1rem;
+  --big: 2rem;
+  --extra-big: 4rem;
 }
 body {
   margin: 0;
@@ -90,29 +94,29 @@ a {
 /* Margin */
 
 .margin-s-x { /* margin small top and bottom */
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+  margin-top: var(--small);
+  margin-bottom: var(--small);
 }
 
 .margin-s-y { /* margin small left and right */
-  margin-left: 0.25rem;
-  margin-left: 0.25rem;
+  margin-left: var(--small);
+  margin-left: var(--small);
 }
 
 .margin-s-t { /* margin small top*/
-  margin-top: 0.25rem;
+  margin-top: var(--small);
 }
 
 .margin-s-b { /* margin small bottom */
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--small);
 }
 
 .margin-s-l { /* margin small left */
-  margin-left: 0.25rem;
+  margin-left: var(--small);
 }
 
 .margin-s-r { /* margin small right */
-  margin-right: 0.25rem;
+  margin-right:  var(--small);
 }
 
 /* Cards */
@@ -146,6 +150,8 @@ a {
   margin: 0.25rem 0;
 }
 
+/* Buttons */
+
 .btn {
   border: none;
   padding: 1rem;
@@ -153,6 +159,15 @@ a {
 }
 .btn.btn-100-width {
   width: 100%;
+}
+.btn.btn-75-width {
+  width: 75%;
+}
+.btn.btn-50-width {
+  width: 50%;
+}
+.btn.btn-25-width {
+  width: 25%;
 }
 .btn.btn-primary {
   background-color: var(--primary-color);

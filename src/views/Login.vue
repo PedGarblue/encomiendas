@@ -31,9 +31,9 @@
               {{ message }}
             </div>
             <div class="form-buttons">
-              <button type="submit" class="btn btn-primary margin-s-b">Ingresar</button>
+              <button type="submit" class="btn btn-primary btn-100-width margin-s-b">Ingresar</button>
               <router-link to="register">
-                <button type="submit" class="btn btn-secondary margin-s-b">Registrase</button>
+                <button type="submit" class="btn btn-secondary btn-100-width margin-s-b">Registrase</button>
               </router-link>
             </div>
           </form>

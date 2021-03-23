@@ -63,7 +63,7 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "indent": ["warning", 2]
+      "indent": [1, 2]
     },
     "overrides": [
       {

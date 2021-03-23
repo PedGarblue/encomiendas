@@ -150,13 +150,15 @@ a {
   border: none;
   padding: 1rem;
   font-size: 1rem;
+}
+.btn.btn-100-width {
   width: 100%;
 }
-.btn-primary {
+.btn.btn-primary {
   background-color: var(--primary-color);
   color: white;
 }
-.btn-secondary {
+.btn.btn-secondary {
   background-color: var(--secondary-color);
   color: white;
 }

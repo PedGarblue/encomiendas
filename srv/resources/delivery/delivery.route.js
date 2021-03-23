@@ -6,6 +6,17 @@ const deliveryController = require('./delivery.controller');
 
 const router = express.Router();
 
-router.post('/', auth('useBikes'), validate(deliveryValidation.createDelivery), deliveryController.createDelivery);
+router.post(
+  '/',
+  auth('useBikes'),
+  validate(deliveryValidation.createDelivery),
+  deliveryController.createDelivery
+);
+router.get(
+  '/:userId',
+  auth('manageBikes'),
+  validate(deliveryValidation.getDeliveriesByUser),
+  deliveryController.getDeliveriesByUser
+);
 
 module.exports = router;

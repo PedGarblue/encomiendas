@@ -16,6 +16,12 @@ const createDelivery = async (data, user) => {
   return delivery;
 };
 
+const getDeliveriesByUserId = async userId => {
+  const deliveries = await Delivery.find({ user: userId, completed: false });
+  return deliveries;
+};
+
 module.exports = {
   createDelivery,
+  getDeliveriesByUserId,
 };

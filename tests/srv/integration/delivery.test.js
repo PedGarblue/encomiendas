@@ -6,7 +6,7 @@ const createHourlist = require('@/srv/utils/createHourList');
 const Delivery = require('@/srv/resources/delivery/delivery.model');
 const setupTestDB = require('../utils/setupTestDB');
 const { bikeOne, insertBikes } = require('../fixtures/bike.fixture');
-const { userOne, insertUsers } = require('../fixtures/user.fixture');
+const { userOne, userTwo, insertUsers } = require('../fixtures/user.fixture');
 const { deliveryOne, insertDeliveries } = require('../fixtures/delivery.fixture');
 const { userOneAccessToken } = require('../fixtures/token.fixture');
 
@@ -113,6 +113,54 @@ describe('Delivery routes', () => {
       expect(resp.body).toEqual({
         code: httpStatus.NOT_FOUND,
         message: 'Sorry, there are no bikes at this hour.',
+      });
+    });
+  });
+
+  describe('GET /delivery/:userId', () => {
+    it('returns 200 with the user delivery list', async () => {
+      await insertDeliveries([deliveryOne]);
+      await insertUsers([userOne]);
+
+      const resp = await request(app)
+        .get(`/api/delivery/${userOne._id}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send()
+        .expect(httpStatus.OK);
+      const { body } = resp;
+      expect(body).toHaveLength(1);
+      expect(body[0]).toEqual({
+        __v: 0,
+        _id: expect.anything(),
+        user: userOne._id.toHexString(),
+        bike: bikeOne._id.toHexString(),
+        completed: false,
+        products: deliveryOne.products,
+        hour: deliveryOne.hour,
+      })
+    });
+
+    it('returns 401 if access token is missing',async () => {
+      const resp = await request(app)
+        .get(`/api/delivery/${userOne._id}`)
+        .send();
+
+      expect(resp.body).toEqual({
+        code: httpStatus.UNAUTHORIZED,
+        message: 'Please authenticate',
+      });
+    });
+
+    it('returns 403 if is requesting another user delivery list',async () => {
+      await insertUsers([userOne, userTwo]);
+      const resp = await request(app)
+        .get(`/api/delivery/${userTwo._id}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send();
+
+      expect(resp.body).toEqual({
+        code: httpStatus.FORBIDDEN,
+        message: 'Forbidden',
       });
     });
   });

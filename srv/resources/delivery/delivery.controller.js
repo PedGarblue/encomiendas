@@ -9,6 +9,13 @@ const createDelivery = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(delivery);
 });
 
+const getDeliveriesByUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const deliveries = await deliveryService.getDeliveriesByUserId(userId);
+  res.status(httpStatus.OK).send(deliveries);
+});
+
 module.exports = {
   createDelivery,
+  getDeliveriesByUser,
 };

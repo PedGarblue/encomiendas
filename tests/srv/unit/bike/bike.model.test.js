@@ -17,5 +17,5 @@ describe('Bike model', () => {
     it('validates a valid Bike', async () => {
       await expect(new Bike(newBike).validate()).resolves.toBeUndefined();
     });
-  })
+  });
 });

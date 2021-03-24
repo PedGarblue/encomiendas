@@ -3,6 +3,7 @@ const authRoute = require('./resources/auth/auth.route');
 const userRoute = require('./resources/user/user.route');
 const deliveryRoute = require('./resources/delivery/delivery.route');
 const hourRoute = require('./resources/hour/hour.route');
+const bikeRoute = require('./resources/bike/bike.route');
 
 const router = express.Router();
 
@@ -23,6 +24,10 @@ const defaultRoutes = [
     path: '/hour',
     route: hourRoute,
   },
+  {
+    path: '/bike',
+    route: bikeRoute,
+  }
 ];
 
 defaultRoutes.forEach(route => {

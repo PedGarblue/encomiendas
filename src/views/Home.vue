@@ -1,15 +1,17 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <h2>Esta es la homepage :D</h2>
+    <h1>Bienvenido</h1>
+    <hour-list />
   </div>
 </template>
 
 <script>
+import HourList from '../components/HourList.vue';
 
 export default {
   name: 'Home',
   components: {
-  }
+    HourList,
+  },
 }
 </script>

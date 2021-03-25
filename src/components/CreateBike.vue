@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isOpen" class="create-bike">
+    <div v-if="isOpen" class="fixed-background">
       <div class="container">
         <div class="card">
           <div class="card-header">
@@ -14,7 +14,7 @@
               </div>
               <div class="form-buttons">
                 <button type="submit" class="btn btn-primary">Agregar</button>
-                <button @click="close" class="btn btn-disabled">Cerrar</button>
+                <button @click="close" class="btn btn-secondary">Cerrar</button>
               </div>
             </form>
           </div>
@@ -67,19 +67,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.create-bike {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #00000017;
-}
-.create-bike .card {
-  background-color: var(--terciary-color);
-}
-</style>
+<style scoped></style>

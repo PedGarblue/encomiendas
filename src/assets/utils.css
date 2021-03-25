@@ -88,6 +88,19 @@
 .margin-b-r {
   margin-right:  var(--big);
 }
+
+/* Font sizes */
+
+.font-small {
+  font-size: var(--small);
+}
+.font-normal {
+  font-size: var(--medium);
+}
+.font-big {
+  font-size: var(--big);
+}
+
 /* Cards */
 
 .card {
@@ -95,6 +108,7 @@
   border-radius: 0.15rem;
   max-width: 30rem;
   margin: 2rem auto;
+  background-color: var(--terciary-color);
 }
 .card-body {
   padding: 1rem 2rem;
@@ -156,6 +170,18 @@
   border: 0.15rem solid;
   padding: 0.5rem;
   border-radius: 0.5rem;
+}
+
+.fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00000017;
 }
 
 @media screen and (min-width: 600px) {

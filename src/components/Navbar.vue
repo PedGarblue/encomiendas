@@ -6,6 +6,9 @@
     </a>
     <div class="flex items">
       <div v-if="isProfileLoaded" class="flex">
+        <router-link v-if="isAdmin" :to="{ name: 'Manage' }" class="btn btn-secondary">
+          Manage
+        </router-link>
         <button @click="logout" class="btn btn-primary">Log out</button>
         <div class="flex user">
           <span class="user__name" :title="getProfile.role">{{ getProfile.name }}</span>
@@ -23,6 +26,9 @@ export default {
   name: 'Navbar',
   computed: {
     ...mapGetters(['isProfileLoaded', 'getProfile']),
+    isAdmin() {
+      return this.getProfile.role === 'admin';
+    },
   },
   methods: {
     ...mapActions([USER_LOGOUT]),

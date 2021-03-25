@@ -149,6 +149,15 @@
 .btn.disabled {
   background-color: var(--disabled-color);
 }
+
+/* Misc */
+
+.frame {
+  border: 0.15rem solid;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
 @media screen and (min-width: 600px) {
   .container {
     margin-left: 10rem;

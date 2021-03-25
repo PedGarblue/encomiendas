@@ -28,7 +28,15 @@ const routes = [
       onlyUnauthenticated: true,
     },
   },
-]
+  {
+    path: '/manage',
+    name: 'Manage',
+    component: () => import(/* webpackChunkName: "manage" */ '../views/Manage.vue'),
+    meta: {
+      authorize: ['admin'],
+    }
+  },
+];
 
 const router = new VueRouter({
   mode: 'history',

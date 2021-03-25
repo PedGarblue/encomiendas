@@ -14,6 +14,7 @@ export const createDelivery = data => {
 };
 
 export const getUserDeliveries = () => {
+  const { token } = store.getters.accessToken;
   const { id } = store.getters.getProfile;
   return request({
     url: `/api/delivery/${id}`,

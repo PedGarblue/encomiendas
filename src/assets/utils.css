@@ -8,6 +8,24 @@
 .flex {
   display: flex;
 }
+.flex.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+/* Width and Height */
+
+.width-25 {
+  width: 25%;
+}
+.width-50 {
+  width: 50%;
+}
+.width-75 {
+  width: 75%;
+}
+.width-100 {
+  width: 100%;
+}
 
 /* Margin */
 
@@ -89,7 +107,10 @@
   margin-right:  var(--big);
 }
 
-/* Font sizes */
+/* Font */
+.font-bold {
+  font-weight: bold;
+}
 
 .font-small {
   font-size: var(--small);

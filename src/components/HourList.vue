@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <div v-if="list" class="list">
+    <div v-if="hasHoursAvaliable" class="list">
       <hour v-for="hour in list" :key="hour.id" :data="hour" />
     </div>
     <div v-else>
@@ -22,6 +22,11 @@ export default {
       list: [],
       err: '',
     };
+  },
+  computed: {
+    hasHoursAvaliable() {
+      return this.list.length > 0;
+    },
   },
   methods: {
     async getAvaliableHours() {

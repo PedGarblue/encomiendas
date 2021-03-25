@@ -1,14 +1,17 @@
 <template>
   <div class="hour">
     <span class="hour__id">{{ data.id }}</span>
-    <button class="btn btn-primary margin-s-x margin-m-l" :class="{ disabled: !isAvaliable }">
-      {{ isAvaliable ? 'Solicitar' : 'No disponible' }}  
-    </button>
+    <create-delivery :hour="data.id" :disabled="!isAvaliable" />
   </div>
 </template>
 
 <script>
+import CreateDelivery from './CreateDelivery';
+
 export default {
+  components: {
+    CreateDelivery,
+  },
   props: {
     data: {
       type: Object,

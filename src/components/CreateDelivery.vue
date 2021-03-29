@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isOpen" class="fixed-background">
+    <div v-if="isOpen" class="fixed-background flex flex-center">
       <div class="card width-100">
         <div class="card-header">
           <h2>Solicitar Pedido: {{ hour }}</h2>

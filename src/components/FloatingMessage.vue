@@ -1,5 +1,5 @@
 <template>
-  <div class="floating-message">
+  <div class="fixed-background flex flex-center">
     <div class="box" :class="context">
       <div class="box-content">{{ message }}</div>
       <button @click="close">Cerrar</button>
@@ -33,17 +33,6 @@ export default {
 </script>
 
 <style scoped>
-.floating-message {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #00000017;
-}
 .box {
   background-color: #fff;
   padding: 1rem 5rem;

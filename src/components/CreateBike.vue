@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isOpen" class="fixed-background">
+    <div v-if="isOpen" class="fixed-background flex flex-center">
       <div class="container">
         <div class="card">
           <div class="card-header">

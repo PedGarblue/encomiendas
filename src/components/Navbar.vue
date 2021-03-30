@@ -9,6 +9,7 @@
         <router-link v-if="isAdmin" :to="{ name: 'Manage' }" class="btn btn-secondary">
           Manage
         </router-link>
+        <view-deliveries />
         <button @click="logout" class="btn btn-primary">Log out</button>
         <div class="flex user">
           <span class="user__name" :title="getProfile.role">{{ getProfile.name }}</span>
@@ -21,9 +22,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { USER_LOGOUT } from '../store/actions/user';
+import ViewDeliveries from './ViewDeliveries';
 
 export default {
   name: 'Navbar',
+  components: {
+    ViewDeliveries,
+  },
   computed: {
     ...mapGetters(['isProfileLoaded', 'getProfile']),
     isAdmin() {

@@ -58,7 +58,7 @@
     </div>
     <button 
       @click="open"
-      class="btn btn-primary margin-s-x margin-m-l"
+      class="btn btn-primary margin-s-y margin-m-l"
       :class="{ disabled }"
     >
       {{ !disabled ? 'Solicitar' : 'No disponible' }}

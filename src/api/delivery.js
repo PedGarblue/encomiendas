@@ -18,7 +18,18 @@ export const getUserDeliveries = () => {
   const { id } = store.getters.getProfile;
   return request({
     url: `/api/delivery/${id}`,
-    method: 'POST',
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const confirmDelivery = deliveryId => {
+  const { token } = store.getters.accessToken;
+  return request({
+    url: `/api/delivery/${deliveryId}`,
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
     },

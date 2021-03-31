@@ -1,4 +1,7 @@
 import axios from 'axios';
+import router from '../router';
+import store from '../store';
+import { USER_LOGOUT } from '../store/actions/user';
 
 const debug = process.env.NODE_ENV === 'development';
 
@@ -22,6 +25,10 @@ const onError = error => {
     } else {
       console.error(`Request message: ${error.message}`);
     }
+  }
+  if(response.status === 401) {
+    store.dispatch(USER_LOGOUT);
+    router.push({ name: 'Login' });
   }
   return Promise.reject(response ? response.data: error);
 };

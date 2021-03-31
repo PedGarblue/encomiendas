@@ -30,6 +30,9 @@ export const confirmDelivery = deliveryId => {
   return request({
     url: `/api/delivery/${deliveryId}`,
     method: 'PATCH',
+    data: {
+      completed: true,
+    },
     headers: {
       Authorization: `Bearer ${token}`,
     },

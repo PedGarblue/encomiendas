@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     confirm() {
-      confirmDelivery()
+      confirmDelivery(this.data.id)
         .then(() => {
           this.$emit('confirm');
         })      

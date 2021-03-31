@@ -18,5 +18,11 @@ router.get(
   validate(deliveryValidation.getDeliveriesByUser),
   deliveryController.getDeliveriesByUser
 );
+router.patch(
+  '/:deliveryId',
+  auth('useBikes'),
+  validate(deliveryValidation.editDelivery),
+  deliveryController.editDelivery
+);
 
 module.exports = router;

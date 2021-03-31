@@ -28,7 +28,17 @@ const getDeliveriesByUser = {
   }),
 };
 
+const editDelivery = {
+  params: Joi.object().keys({
+    deliveryId: Joi.string().custom(objectId).required(),
+  }),
+  body: Joi.object().keys({
+    completed: Joi.boolean().truthy().required(),
+  }),
+};
+
 module.exports = {
   createDelivery,
   getDeliveriesByUser,
+  editDelivery,
 };

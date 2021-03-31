@@ -3,11 +3,12 @@ const httpStatus = require('http-status');
 const faker = require('faker');
 const app = require('@/srv/app');
 const createHourlist = require('@/srv/utils/createHourList');
+const { omit } = require('@/srv/utils/object.util');
 const Delivery = require('@/srv/resources/delivery/delivery.model');
 const setupTestDB = require('../utils/setupTestDB');
 const { bikeOne, insertBikes } = require('../fixtures/bike.fixture');
 const { userOne, userTwo, insertUsers } = require('../fixtures/user.fixture');
-const { deliveryOne, insertDeliveries } = require('../fixtures/delivery.fixture');
+const { deliveryOne, deliveryTwo, parseDeliveryFixture, insertDeliveries } = require('../fixtures/delivery.fixture');
 const { userOneAccessToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
@@ -170,7 +171,83 @@ describe('Delivery routes', () => {
   });
 
   describe('PATCH /delivery/:deliveryid', () => {
-    it('updates successfully a delivery', () => {});
+    let newDelivery;
+
+    beforeEach(() => {
+      newDelivery = {
+        completed: true,
+      };
+    });
+
+    it('updates successfully a delivery', async () => {
+      await insertUsers([userOne]);
+      await insertDeliveries([deliveryOne]);
+
+      const resp = await request(app)
+        .patch(`/api/delivery/${deliveryOne._id}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send(newDelivery)
+        .expect(httpStatus.OK);
+
+      const body = resp.body;
+      const delivery = parseDeliveryFixture(deliveryOne);
+      expect(body).toEqual(Object.assign(delivery, newDelivery));
+
+      const deliveryDB = await Delivery.findById(deliveryOne._id);
+      expect(deliveryDB).toBeDefined();
+      expect(deliveryDB.toJSON()).toMatchObject(Object.assign(deliveryOne, newDelivery));
+    });
+
+    it('returns 400 if has invalid body params', async () => {
+      await insertUsers([userOne]);
+      newDelivery.user = userTwo._id;
+
+      const resp = await request(app)
+        .patch(`/api/delivery/${deliveryOne._id}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send(newDelivery);
+      expect(resp.body).toEqual({
+        code: httpStatus.BAD_REQUEST,
+        message: '"user" is not allowed',
+      });
+    });
+
+    it('returns 401 if access token is missing', async () => {
+      const resp = await request(app)
+        .patch(`/api/delivery/${deliveryOne._id}`)
+        .send(newDelivery);
+      expect(resp.body).toEqual({
+        code: httpStatus.UNAUTHORIZED,
+        message: 'Please authenticate',
+      });
+    });
+
+    it('returns 403 if is user trying to edit other user Delivery', async () => {
+      await insertUsers([userOne, userTwo]);
+      await insertDeliveries([deliveryTwo]);
+
+      const resp = await request(app)
+        .patch(`/api/delivery/${deliveryTwo._id}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send(newDelivery);
+      expect(resp.body).toEqual({
+        code: httpStatus.FORBIDDEN,
+        message: 'Forbidden',
+      });
+    })
+
+    it('return 404 if delivery is not found', async () => {
+      await insertUsers([userOne]);
+
+      const resp = await request(app)
+        .patch(`/api/delivery/${deliveryOne._id}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send(newDelivery);
+      expect(resp.body).toEqual({
+        code: httpStatus.NOT_FOUND,
+        message: 'Delivery not found',
+      });
+    });
   });
 
   describe('DELETE /delivery/delivery:id', () => {

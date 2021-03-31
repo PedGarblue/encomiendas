@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div v-if="hasHoursAvaliable" class="list">
-      <hour v-for="hour in list" :key="hour.id" :data="hour" />
+      <hour v-for="hour in list" :key="hour.id" :data="hour" @action="getAvaliableHours" />
     </div>
     <div v-else>
       {{ err }}

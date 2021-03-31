@@ -3,7 +3,7 @@ const Delivery = require('../delivery/delivery.model');
 const { pick } = require('../../utils/object.util');
 
 const getAvaliableBikeByHour = async hour => {
-  const deliveries = await Delivery.find({ hour });
+  const deliveries = await Delivery.find({ hour, completed: false });
   const deliveriesOccupied = deliveries.map(delivery => delivery.toJSON().bike);
   const bike = await Bike.findOne({ 
     _id: {

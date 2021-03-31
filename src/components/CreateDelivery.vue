@@ -170,6 +170,7 @@ export default {
           this.stage = STAGE_COMPLETE;
         },
         [STAGE_COMPLETE]: () => {
+          this.$emit('created');
           this.close();
         },
       };

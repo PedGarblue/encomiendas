@@ -1,7 +1,11 @@
 <template>
   <div class="hour">
     <span class="hour__id">{{ data.id }}</span>
-    <create-delivery :hour="data.id" :disabled="!isAvaliable" />
+    <create-delivery 
+      :hour="data.id"
+      :disabled="!isAvaliable"
+      @created="onAction"
+    />
   </div>
 </template>
 
@@ -22,6 +26,11 @@ export default {
     isAvaliable() {
       return this.data.avaliable
     },
+  },
+  methods: {
+    onAction() {
+      this.$emit('action');
+    }
   },
 };
 </script>

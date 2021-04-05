@@ -1,28 +1,19 @@
 <template>
-  <div>
-    <transition name="slide">
-      <div v-if="isOpen" class="fixed-background flex">
-        <div class="bg-terciary width-25 margin-a-l">
-          <div class="bg-primary padding-m-y">
-            <span class="btn btn-secondary close-btn" @click="close">
-              X
-            </span>
-            <span>Mis pedidos</span>
-          </div>
-          <div class="deliveries margin-s-m">
-            <delivery 
-              v-for="delivery in deliveries"
-              :key="delivery.id"
-              :data="delivery"
-              @confirm="requestMyDeliveries"
-            />
-          </div>
-        </div>
-      </div>
-    </transition>
-    <div class="btn btn-secondary" @click="open">
-      Mis Pedidos
+  <div class="bg-terciary">
+    <div class="margin-s-b padding-m-y bg-secondary">
+      Tus pedidos
     </div>
+    <transition name="fade" mode="out-in">
+      <div v-if="hasDeliveriesAvaliable" class="deliveries">
+        <delivery 
+          v-for="delivery in deliveries"
+          :key="delivery.id"
+          :data="delivery"
+          @confirm="requestMyDeliveries"
+        />
+      </div>
+      <h2 v-else>{{ message }}</h2>
+    </transition>
   </div>
 </template>
 
@@ -30,8 +21,10 @@
 import Delivery from './Delivery';
 import { getUserDeliveries } from '../api/delivery';
 
-const WINDOW_CLOSED = 'WINDOW_CLOSED';
-const WINDOW_OPEN = 'WINDOW_OPEN';
+const IDLE = 'IDLE';
+const LOADING = 'LOADING';
+const SUCCESS = 'SUCCESS';
+const ERROR = 'ERROR';
 
 export default {
   components: {
@@ -40,14 +33,11 @@ export default {
   data() {
     return {
       deliveryList: [],
-      status: WINDOW_CLOSED,
+      status: IDLE,
       err: '',
     };
   },
   computed: {
-    isOpen() {
-      return this.status === WINDOW_OPEN;
-    },
     deliveries() {
       return this.deliveryList.map(delivery => ({
         id: delivery._id,
@@ -56,20 +46,30 @@ export default {
         products: delivery.products,
       }));
     },
+    message() {
+      switch (this.status) {
+      case LOADING: 
+        return 'Espere...';
+      case ERROR:
+        return this.err;
+      default:
+        return '¡No has hecho ningún pedido!';
+      }
+    },
+    hasDeliveriesAvaliable() {
+      return this.status === SUCCESS && this.deliveries.length > 0;
+    },
   },
   methods: {
-    open() {
-      this.status = WINDOW_OPEN;
-    },
-    close() {
-      this.status = WINDOW_CLOSED;
-    },
     async requestMyDeliveries() {
+      this.status = LOADING;
       return getUserDeliveries()
         .then(resp => {
+          this.status = SUCCESS;
           this.deliveryList = resp;
         })
         .catch(err => {
+          this.status = ERROR;
           this.err = err;
         });
     },
@@ -81,13 +81,8 @@ export default {
 </script>
 
 <style>
-.close-btn {
-  float: left;
-  position: relative;
-  top: -1rem;
-}
 .deliveries {
-  overflow: auto;
-  height: 85vh;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 </style>

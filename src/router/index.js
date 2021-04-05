@@ -8,9 +8,23 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
     component: Home,
     meta: {},
+    children: [
+      {
+        path: '/',
+        name: 'HourList',
+        component: () => import(/* webpackChunkName: "hourlist" */ '../components/HourList.vue'),
+        meta: {},
+      },
+      {
+        path: '/deliveries',
+        name: 'UserDeliveries',
+        component: () =>
+          import(/* webpackChunkName: "user-deliveries" */ '../components/ViewDeliveries.vue'),
+        meta: {},
+      },
+    ]
   },
   {
     path: '/login',

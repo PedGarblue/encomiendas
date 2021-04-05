@@ -1,7 +1,6 @@
 <template>
   <nav>
     <a href="/" class="flex brand">
-      <img src="https://img.icons8.com/cotton/64/000000/scooter--v4.png"/>
       <span>Encomiendas</span>
     </a>
     <div class="flex items">
@@ -9,10 +8,16 @@
         <router-link v-if="isAdmin" :to="{ name: 'Manage' }" class="btn btn-secondary">
           Manage
         </router-link>
-        <view-deliveries />
-        <button @click="logout" class="btn btn-primary">Log out</button>
+        <span
+          @click="logout"
+          class="btn btn-primary flex flex-center"
+        >
+          <i class="icon-exit"></i>
+        </span>
         <div class="flex user">
-          <span class="user__name" :title="getProfile.role">{{ getProfile.name }}</span>
+          <div class="user__picture" :title="getProfile.name">
+            <img :src="userPictureUrl" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -22,17 +27,22 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { USER_LOGOUT } from '../store/actions/user';
-import ViewDeliveries from './ViewDeliveries';
 
 export default {
   name: 'Navbar',
-  components: {
-    ViewDeliveries,
-  },
+  components: {},
   computed: {
     ...mapGetters(['isProfileLoaded', 'getProfile']),
     isAdmin() {
       return this.getProfile.role === 'admin';
+    },
+    userPictureUrl() {
+      const defaultsPicsUrls = {
+        admin: () => require('../assets/default-profile.png'),
+        user: () => require('../assets/default-profile.png'),
+      };
+      const defaultPicture = defaultsPicsUrls[this.getProfile.role]();
+      return this.getProfile.picture || defaultPicture;
     },
   },
   methods: {
@@ -47,10 +57,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 nav {
   display: flex;
   background-color: var(--primary-color);
+}
+
+i {
+  font-size: 1.3rem;
 }
 
 .brand {
@@ -77,7 +91,7 @@ nav {
 
 .user {
   align-items: center;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
 }
 .user__name {
   font-weight: bolder;
@@ -85,5 +99,20 @@ nav {
   padding: 0.5rem;
   border-radius: 0.3rem;
   cursor: default;
+}
+
+.user__picture {
+  padding: var(--small);
+  border: 0.15rem solid #aeaeae;
+  background-color: var(--complementary-background);
+  border-radius: 50%;
+  height: 2.2rem;
+  width: 2.2rem;
+  display: flex;
+  justify-content: center;
+}
+.user__picture img {
+  width: 2rem;
+  height: 2rem;
 }
 </style>

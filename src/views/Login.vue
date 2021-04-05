@@ -73,7 +73,7 @@ export default {
         });
       await this[USER_REQUEST](user)
         .then(() => {
-          this.$router.push({ name: 'Home' });
+          this.$router.push({ name: 'HourList' });
         })
         .catch(err => {
           this.message = err; 

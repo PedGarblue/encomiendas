@@ -1,61 +1,49 @@
 <template>
   <div>
-    <div v-if="isOpen" class="fixed-background flex flex-center">
-      <div class="card width-100">
-        <div class="card-header">
-          <h2>Solicitar Pedido: {{ hour }}</h2>
-          <div>{{ err }}</div>
-        </div>
-        <div class="card-body">
-          <div v-if="selectProducts">
-            <div class="flex flex-center">
-              <div 
-                v-for="product in avaliableProducts"
-                :key="product"
-                class="btn margin-s-y"
-                :class="{ 
-                  'btn-secondary': !isProductSelected(product),
-                  'btn-primary': isProductSelected(product)
-                }"
-                @click="toggleProduct(product)"
-              >
-                {{ product }}
-              </div>
-            </div>
+    <transition name="slide">
+      <div v-if="isOpen" class="fixed-background flex flex-center">
+        <div class="card width-100">
+          <div class="card-header">
+            <h2>Solicitar Pedido: {{ hour }}</h2>
+            <div>{{ err }}</div>
           </div>
-          <div v-else-if="deliveryRequest">
-            <h3>Solicitando pedido...</h3>
+          <div class="card-body">
+            <transition name="fade" mode="out-in">
+              <div v-if="selectProducts" key="selectProducts">
+                <div class="flex flex-center">
+                  <div 
+                    v-for="product in avaliableProducts"
+                    :key="product.name"
+                    class="btn margin-s-x"
+                    :class="{ 
+                      'btn-secondary': !isProductSelected(product.name),
+                      'btn-primary': isProductSelected(product.name)
+                    }"
+                    @click="toggleProduct(product.name)"
+                  >
+                    <div>{{ product.icon }}</div>
+                    <div>{{ product.name }}</div>
+                  </div>
+                </div>
+              </div>
+              <div v-else-if="deliveryRequest" key="deliveryRequest">
+                <h3>Solicitando pedido...</h3>
+              </div>
+              <div v-else-if="deliveryComplete" key="deliveryComplete">
+                <h3>¡Pedido Creado!</h3>
+                <delivery :data="delivery" :static="true" />
+              </div>
+            </transition>
           </div>
-          <div v-else-if="deliveryComplete">
-            <h3>¡Pedido Creado!</h3>
-            <div>
-              <div>
-                <span class="font-bold">#: </span>
-                <span>{{ this.delivery.id }}</span>
-              </div>
-              <div>
-                <span class="font-bold">ID Bicicleta: </span>
-                <span>{{ this.delivery.bike }}</span>
-              </div>
-              <div>
-                <span class="font-bold">Hora: </span>
-                <span>{{ this.delivery.hour }}</span>
-              </div>
-              <div>
-                <span class="font-bold">Productos: </span>
-                <span>{{ this.delivery.products }}</span>
-              </div>
-            </div>
+          <div class="card-footer">
+            <button class="btn btn-primary margin-s-x" @click="nextStage">
+              Continuar
+            </button>
+            <button @click="close" class="btn btn-secondary margin-s-x">Cancelar</button>
           </div>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn-primary" @click="nextStage">
-            Continuar
-          </button>
-          <button @click="close" class="btn btn-secondary">Cancelar</button>
         </div>
       </div>
-    </div>
+    </transition>
     <button 
       @click="open"
       class="btn btn-primary margin-s-y margin-m-l"
@@ -69,6 +57,7 @@
 <script>
 import { pick } from '../utils/object.util';
 import { createDelivery } from '../api/delivery';
+import Delivery from './Delivery';
 
 const STAGE_CLOSED = 'STAGE_CLOSED';
 const STAGE_SELECT_PRODUCTS = 'STAGE_SELECT_PRODUCTS';
@@ -76,6 +65,9 @@ const STAGE_REQUEST = 'STAGE_REQUEST';
 const STAGE_COMPLETE = 'STAGE_COMPLETE';
 
 export default {
+  components: {
+    Delivery,
+  },
   props: {
     hour: {
       type: String,
@@ -90,7 +82,20 @@ export default {
     avaliableProducts: {
       type: Array,
       default() {
-        return ['apples', 'cookies', 'fororo'];
+        return [
+          {
+            name: 'apples',
+            icon: '🍎',
+          },
+          {
+            name: 'fororo',
+            icon: '🍞',
+          },
+          {
+            name: 'cookies',
+            icon: '🍪',
+          },
+        ];
       },
     },
   },
@@ -180,4 +185,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.product {
+  padding: var(--small);
+  background-color: #eeeeee;
+  border: 0.1rem solid rgb(66, 62, 62);
+  border-radius: 0.3rem;
+}
+</style>

@@ -154,11 +154,11 @@
 /* Cards */
 
 .card {
-  border: 0.15rem solid;
-  border-radius: 0.15rem;
+  background-color: var(--terciary-color);
+  border: 0.15rem solid var(--complementary-terciary-color);
+  border-radius: 0.3rem;
   max-width: 30rem;
   margin: 2rem auto;
-  background-color: var(--terciary-color);
 }
 .card-body {
   padding: 1rem 2rem;
@@ -189,6 +189,11 @@
   border: none;
   padding: 1rem;
   font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.28, 0.83, 0.82, 1.18);
+}
+.block {
+  display: block;
 }
 .btn.btn-100-width {
   width: 100%;
@@ -206,9 +211,15 @@
   background-color: var(--primary-color);
   color: white;
 }
+.btn.btn-primary:hover {
+  background-color: var(--primary-light-color);
+}
 .btn.btn-secondary {
   background-color: var(--secondary-color);
   color: white;
+}
+.btn.btn-secondary:hover {
+  background-color: var(--secondary-light-color);
 }
 .btn.btn-terciary {
   background-color: var(--terciary-color);
@@ -221,7 +232,7 @@
 /* Misc */
 
 .frame {
-  border: 0.15rem solid;
+  border: 0.15rem solid gray;
   padding: 0.5rem;
   border-radius: 0.5rem;
 }
@@ -245,10 +256,10 @@
 /* Animations and transitions */
 
 .fade-enter-active {
-  animation: fade-in 0.5s;
+  animation: fade-in 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .fade-leave-active {
-  animation: fade-in 0.5s reverse;
+  animation: fade-in 0.3s reverse cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 @keyframes fade-in {
@@ -259,4 +270,16 @@
   to {
     opacity: 1;
   }
+}
+
+.slide-enter {
+  opacity: 0;
+  transform: translateX(-10rem);
+}
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(10rem);
+}
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
 }

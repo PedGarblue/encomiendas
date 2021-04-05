@@ -1,5 +1,6 @@
 <template>
   <div class="hour">
+    <i class="icon-bike"></i>
     <span class="hour__id">{{ data.id }}</span>
     <create-delivery 
       :hour="data.id"
@@ -37,7 +38,10 @@ export default {
 
 <style scoped>
   .hour {
+    background-color: white;
     display: flex;
+    justify-content: center;
+    align-items: center;
     margin: var(--small) auto;
     width: max-content;
     padding: 1rem;
@@ -46,5 +50,9 @@ export default {
   }
   .hour__id {
     font-size: 3rem;
+  }
+  .icon-bike {
+    font-size: 4rem;
+    margin-right: var(--medium);
   }
 </style>

@@ -18,7 +18,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import Navbar from './components/Navbar.vue';
 import FloatingMessage from './components/FloatingMessage.vue';
-import { USER_REQUEST } from './store/actions/user';
+import { USER_LOAD } from './store/actions/user';
 import Footer from './components/Footer.vue';
 
 export default {
@@ -40,9 +40,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions([USER_REQUEST]),
+    ...mapActions([USER_LOAD]),
     loadUser() {
-      this[USER_REQUEST]()
+      this[USER_LOAD]()
         .catch(err => {
           this.err = err;
         });

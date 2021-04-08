@@ -54,7 +54,7 @@
 import { mapActions } from 'vuex';
 import { pick } from '../utils/object.util';
 import { AUTH_REGISTER } from '../store/actions/auth';
-import { USER_REQUEST } from '../store/actions/user';
+import { USER_LOAD } from '../store/actions/user';
 
 export default {
   data() {
@@ -68,7 +68,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions([AUTH_REGISTER, USER_REQUEST]),
+    ...mapActions([AUTH_REGISTER, USER_LOAD]),
     async register() {
       let user;
       if(this.user.password !== this.user.repeatpass) {
@@ -83,7 +83,7 @@ export default {
         .catch(err => {
           this.message = err; 
         });
-      await this[USER_REQUEST](user)
+      await this[USER_LOAD](user)
         .then(() => {
           this.$router.push({ name: 'Home' });
         })

@@ -4,12 +4,12 @@
       Tus pedidos
     </div>
     <transition name="fade" mode="out-in">
-      <div v-if="hasDeliveriesAvaliable" class="deliveries">
+      <div v-if="hasPendingDeliveries" class="deliveries">
         <delivery 
           v-for="delivery in deliveries"
           :key="delivery.id"
           :data="delivery"
-          @confirm="requestMyDeliveries"
+          @confirm="updatePendingDeliveries"
         />
       </div>
       <h2 v-else>{{ message }}</h2>
@@ -18,10 +18,10 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import Delivery from './Delivery';
-import { getUserDeliveries } from '../api/delivery';
+import { USER_DELIVERIES_REQUEST } from '../store/actions/user';
 
-const IDLE = 'IDLE';
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
 const ERROR = 'ERROR';
@@ -33,13 +33,14 @@ export default {
   data() {
     return {
       deliveryList: [],
-      status: IDLE,
+      status: SUCCESS,
       err: '',
     };
   },
   computed: {
+    ...mapGetters(['pendingDeliveries', 'hasPendingDeliveries']),
     deliveries() {
-      return this.deliveryList.map(delivery => ({
+      return this.pendingDeliveries.map(delivery => ({
         id: delivery._id,
         bike: delivery.bike,
         hour: delivery.hour,
@@ -47,35 +48,28 @@ export default {
       }));
     },
     message() {
-      switch (this.status) {
-      case LOADING: 
-        return 'Espere...';
-      case ERROR:
+      if (this.status === LOADING) {
+        return 'Cargando...';
+      } else if (this.status === ERROR) {
         return this.err;
-      default:
+      } else {
         return '¡No has hecho ningún pedido!';
       }
     },
-    hasDeliveriesAvaliable() {
-      return this.status === SUCCESS && this.deliveries.length > 0;
-    },
   },
   methods: {
-    async requestMyDeliveries() {
+    ...mapActions([USER_DELIVERIES_REQUEST]),
+    updatePendingDeliveries() {
       this.status = LOADING;
-      return getUserDeliveries()
-        .then(resp => {
+      this[USER_DELIVERIES_REQUEST]()
+        .then(() => {
           this.status = SUCCESS;
-          this.deliveryList = resp;
         })
         .catch(err => {
           this.status = ERROR;
-          this.err = err;
+          this.err = err.message;
         });
     },
-  },
-  mounted() {
-    this.requestMyDeliveries();
   },
 };
 </script>

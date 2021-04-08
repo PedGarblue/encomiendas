@@ -46,7 +46,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { AUTH_LOGIN } from '../store/actions/auth';
-import { USER_REQUEST } from '../store/actions/user';
+import { USER_LOAD } from '../store/actions/user';
 import { pick } from '../utils/object.util';
 
 export default {
@@ -60,7 +60,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions([AUTH_LOGIN, USER_REQUEST]),
+    ...mapActions([AUTH_LOGIN, USER_LOAD]),
     async login() {
       const data = pick(this.user, ['name', 'password']);
       let user = {};
@@ -71,7 +71,7 @@ export default {
         .catch(err => {
           this.message = err; 
         });
-      await this[USER_REQUEST](user)
+      await this[USER_LOAD](user)
         .then(() => {
           this.$router.push({ name: 'HourList' });
         })

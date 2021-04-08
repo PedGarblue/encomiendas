@@ -58,6 +58,8 @@
 import { pick } from '../utils/object.util';
 import { createDelivery } from '../api/delivery';
 import Delivery from './Delivery';
+import { USER_DELIVERIES_REQUEST } from '../store/actions/user';
+import { mapActions } from 'vuex';
 
 const STAGE_CLOSED = 'STAGE_CLOSED';
 const STAGE_SELECT_PRODUCTS = 'STAGE_SELECT_PRODUCTS';
@@ -132,6 +134,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions([USER_DELIVERIES_REQUEST]),
     open() {
       if(!this.disabled) {
         this.delivery.hour = this.hour;
@@ -173,6 +176,7 @@ export default {
           this.delivery.hour = hour;
           this.delivery.products = products;
           this.stage = STAGE_COMPLETE;
+          this[USER_DELIVERIES_REQUEST]();
         },
         [STAGE_COMPLETE]: () => {
           this.$emit('created');

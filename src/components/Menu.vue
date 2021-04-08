@@ -12,14 +12,22 @@
         class="btn btn-primary font-bold"
       >
         <i class="icon-star-full margin-s-r"></i>Pedidos
+        <span v-if="hasPendingDeliveries" class="pending">{{ pendingDeliveriesCount }}</span>
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-
+  name: 'Menu',
+  computed: {
+    ...mapGetters(['hasPendingDeliveries', 'pendingDeliveries']),
+    pendingDeliveriesCount() {
+      return this.pendingDeliveries.length;
+    },
+  },
 }
 </script>
 
@@ -31,5 +39,12 @@ export default {
   display: flex;
   align-items: center;
   text-align: left;
+}
+.pending {
+  background-color: white;
+  color: var(--primary-color);
+  padding: 0 0.3rem;
+  border-radius: 50%;
+  margin-left: 0.3rem;
 }
 </style>

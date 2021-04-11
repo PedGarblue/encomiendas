@@ -5,6 +5,20 @@
   margin-right: 1rem;
 }
 
+@media screen and (min-width: 600px) {
+  .container {
+    margin-left: 3rem;
+    margin-right: 3rem;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .container {
+    margin-left: 10rem;
+    margin-right: 10rem;
+  }
+}
+
 .flex {
   display: flex;
 }
@@ -246,13 +260,6 @@
   background-color: #00000017;
 }
 
-@media screen and (min-width: 600px) {
-  .container {
-    margin-left: 10rem;
-    margin-right: 10rem;
-  }
-}
-
 /* Animations and transitions */
 
 .fade-enter-active {
@@ -280,6 +287,9 @@
   opacity: 0;
   transform: translateX(10rem);
 }
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active, .slide-leave-active, .slide-move {
   transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.slide-leave-active {
+  position: absolute;
 }

@@ -4,14 +4,14 @@
       Tus pedidos
     </div>
     <transition name="fade" mode="out-in">
-      <div v-if="hasPendingDeliveries" class="deliveries">
-        <delivery 
-          v-for="delivery in deliveries"
-          :key="delivery.id"
-          :data="delivery"
-          @confirm="updatePendingDeliveries"
-        />
-      </div>
+        <transition-group name="slide" mode="out-in" v-if="hasPendingDeliveries" class="deliveries">
+          <delivery 
+            v-for="delivery in deliveries"
+            :key="delivery.id"
+            :data="delivery"
+            @confirm="updatePendingDeliveries"
+          />
+        </transition-group>
       <h2 v-else>{{ message }}</h2>
     </transition>
   </div>
@@ -76,7 +76,18 @@ export default {
 
 <style>
 .deliveries {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+@media screen and (min-width: 400px) {
+  .deliveries {
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .deliveries {
+  }
 }
 </style>

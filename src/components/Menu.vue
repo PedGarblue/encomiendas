@@ -38,7 +38,7 @@ export default {
 .btn {
   display: flex;
   align-items: center;
-  text-align: left;
+  text-align: center;
 }
 .pending {
   background-color: white;
@@ -46,5 +46,10 @@ export default {
   padding: 0 0.3rem;
   border-radius: 50%;
   margin-left: 0.3rem;
+}
+@media screen and (min-width: 600px) {
+  .btn {
+    text-align: left;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="create-delivery">
     <transition name="slide">
       <div v-if="isOpen" class="fixed-background flex flex-center">
         <div class="card width-100">
@@ -46,7 +46,7 @@
     </transition>
     <button 
       @click="open"
-      class="btn btn-primary margin-s-y margin-m-l"
+      class="btn btn-primary"
       :class="{ disabled }"
     >
       {{ !disabled ? 'Solicitar' : 'No disponible' }}
@@ -189,11 +189,15 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .product {
   padding: var(--small);
   background-color: #eeeeee;
   border: 0.1rem solid rgb(66, 62, 62);
   border-radius: 0.3rem;
+}
+button {
+  margin: var(--small) 0;
+  width: 100%;
 }
 </style>

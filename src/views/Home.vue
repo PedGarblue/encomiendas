@@ -23,9 +23,14 @@ export default {
 <style scoped>
 .grid {
   background-color: var(--complementary-background);
-  display: grid;
-  grid-template-columns: 1fr 2fr;
   min-height: calc(100vh - 11rem);
   box-shadow: 0rem 0rem 0.4rem -0.2rem;;
+}
+
+@media screen and (min-width: 600px) {
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
 }
 </style>

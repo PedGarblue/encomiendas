@@ -38,10 +38,12 @@
               >
             </div>
             <div class="form-buttons">
-              <button type="submit" class="btn btn-primary">Registrarse</button>
-              <router-link to="login">
-                ¿Ya tienes una cuenta?
-              </router-link>
+              <button type="submit" class="btn btn-primary width-100">Registrarse</button>
+              <div class="margin-m-t">
+                <router-link to="login">
+                  ¿Ya tienes una cuenta?
+                </router-link>
+              </div>
             </div>
           </form>
         </div>
@@ -85,7 +87,7 @@ export default {
         });
       await this[USER_LOAD](user)
         .then(() => {
-          this.$router.push({ name: 'Home' });
+          this.$router.push({ name: 'HourList' });
         })
         .catch(err => {
           this.message = err; 

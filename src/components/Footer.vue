@@ -20,9 +20,14 @@ export default {
 <style>
 .copyright {
   display: flex;
-  padding: 2rem 4rem;
+  padding: 2rem 1rem;
   background-color: #e6e6e6;
   color: var(--text-color);
+}
+@media screen and (min-width: 600px) {
+  .copyright {
+    padding: 2rem 4rem;
+  }
 }
 .social-link {
   padding: 0.4rem 0.5rem;

@@ -25,6 +25,7 @@
                 type="password"
                 required
                 autocomplete="new-password"
+                minlength="8"
               >
             </div>
             <div class="form-group">
@@ -35,6 +36,7 @@
                 type="password"
                 required
                 autocomplete="new-password"
+                minlength="8"
               >
             </div>
             <div class="form-buttons">
@@ -49,16 +51,36 @@
         </div>
       </div>
     </div>
+    <transition name="fade">
+      <loading v-if="isLoading" :fixed="true"/>
+      <floating-message 
+        v-if="hasError"
+        context="error"
+        :message="message"
+        @close="cleanStatus"
+      />
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import Loading from '../components/Loading.vue';
 import { pick } from '../utils/object.util';
 import { AUTH_REGISTER } from '../store/actions/auth';
 import { USER_LOAD } from '../store/actions/user';
+import FloatingMessage from '../components/FloatingMessage.vue';
+
+const IDLE = 'IDLE';
+const LOADING = 'LOADING';
+const SUCCESS = 'SUCCESS';
+const ERROR = 'ERROR';
 
 export default {
+  components: {
+    Loading,
+    FloatingMessage,
+  },
   data() {
     return {
       user: {
@@ -66,13 +88,25 @@ export default {
         password: '',
         repeatpass: '',
       },
+      status: IDLE,
       message: '',
     };
   },
+  computed: {
+    isLoading() {
+      return this.status === LOADING;
+    },
+    hasError() {
+      return this.status === ERROR;
+    }
+  },
   methods: {
     ...mapActions([AUTH_REGISTER, USER_LOAD]),
+    cleanStatus() {
+      return this.status = IDLE;
+    },
     async register() {
-      let user;
+      this.status = LOADING;
       if(this.user.password !== this.user.repeatpass) {
         this.message = 'Las contraseñas no coinciden';
         return;
@@ -80,17 +114,15 @@ export default {
       const data = pick(this.user, ['name', 'password']);
       await this[AUTH_REGISTER](data)
         .then(resp => {
-          user = resp.user;
+          return this[USER_LOAD](resp.user);
         })
-        .catch(err => {
-          this.message = err; 
-        });
-      await this[USER_LOAD](user)
         .then(() => {
+          this.status = SUCCESS;
           this.$router.push({ name: 'HourList' });
         })
         .catch(err => {
           this.message = err; 
+          this.status = ERROR;
         });
     }
   },

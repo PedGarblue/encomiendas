@@ -51,11 +51,11 @@ export default {
 }
 
 button {
-  width: 100%;
   border: none;
   border-radius: 0.3rem;
   transition: 0.2s ease-in;
   cursor: pointer;
+  padding: 1rem 3rem;
 }
 button:hover {
   opacity: 0.7;

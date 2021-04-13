@@ -4,14 +4,17 @@
       Tus pedidos
     </div>
     <transition name="fade" mode="out-in">
-        <transition-group name="slide" mode="out-in" v-if="hasPendingDeliveries" class="deliveries">
-          <delivery 
-            v-for="delivery in deliveries"
-            :key="delivery.id"
-            :data="delivery"
-            @confirm="updatePendingDeliveries"
-          />
-        </transition-group>
+      <transition-group name="slide" mode="out-in" v-if="hasDeliveries" class="deliveries">
+        <delivery 
+          v-for="delivery in deliveries"
+          :key="delivery.id"
+          :data="delivery"
+          @confirm="updatePendingDeliveries"
+        />
+      </transition-group>
+      <div v-else-if="isLoading" class="flex">
+        <loading class="margin-a-x"/>
+      </div>
       <h2 v-else>{{ message }}</h2>
     </transition>
   </div>
@@ -21,6 +24,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import Delivery from './Delivery';
 import { USER_DELIVERIES_REQUEST } from '../store/actions/user';
+import Loading from './Loading.vue';
 
 const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
@@ -29,16 +33,23 @@ const ERROR = 'ERROR';
 export default {
   components: {
     Delivery,
+    Loading,
   },
-  data() {
+  data(){
     return {
       deliveryList: [],
-      status: SUCCESS,
+      status: SUCCESS, 
       err: '',
     };
   },
   computed: {
     ...mapGetters(['pendingDeliveries', 'hasPendingDeliveries']),
+    isLoading() {
+      return this.status === LOADING;
+    },
+    hasDeliveries() {
+      return this.hasPendingDeliveries && this.status === SUCCESS;
+    },
     deliveries() {
       return this.pendingDeliveries.map(delivery => ({
         id: delivery._id,
@@ -48,11 +59,10 @@ export default {
       }));
     },
     message() {
-      if (this.status === LOADING) {
-        return 'Cargando...';
-      } else if (this.status === ERROR) {
-        return this.err;
-      } else {
+      switch (this.status) {
+      case ERROR:
+        return 'Ups, ha sucedido un error al obtener tus pedidos.'; 
+      default:
         return '¡No has hecho ningún pedido!';
       }
     },
@@ -79,15 +89,5 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-}
-
-@media screen and (min-width: 400px) {
-  .deliveries {
-  }
-}
-
-@media screen and (min-width: 1000px) {
-  .deliveries {
-  }
 }
 </style>

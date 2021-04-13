@@ -27,9 +27,6 @@
                 autocomplete="current-password"
               >
             </div>
-            <div v-if="message" class="message">
-              {{ message }}
-            </div>
             <div class="form-buttons">
               <button type="submit" class="btn btn-primary btn-100-width margin-s-b">Ingresar</button>
               <router-link to="register">
@@ -40,42 +37,69 @@
         </div>
       </div>
     </div>
+    <transition name="fade">
+      <loading v-if="isLoading" :fixed="true" />
+      <floating-message 
+        v-else-if="hasError"
+        context="error"
+        :message="message"
+        @close="cleanStatus"
+      />
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import FloatingMessage from '../components/FloatingMessage.vue';
+import Loading from '../components/Loading.vue';
 import { AUTH_LOGIN } from '../store/actions/auth';
 import { USER_LOAD } from '../store/actions/user';
 import { pick } from '../utils/object.util';
 
+const IDLE = 'IDLE';
+const LOADING = 'LOADING';
+const SUCCESS = 'SUCCESS';
+const ERROR = 'ERROR';
+
 export default {
+  components: { Loading, FloatingMessage },
   data() {
     return {
       user: {
         name: '',
         password: '',
       },
+      status: IDLE,
       message: '',
     };
   },
+  computed: {
+    isLoading() {
+      return this.status === LOADING;
+    }, 
+    hasError() {
+      return this.status === ERROR;
+    }, 
+  },
   methods: {
     ...mapActions([AUTH_LOGIN, USER_LOAD]),
+    cleanStatus() {
+      this.status = IDLE;
+    },
     async login() {
       const data = pick(this.user, ['name', 'password']);
-      let user = {};
+      this.status = LOADING;
       await this[AUTH_LOGIN](data)
         .then(resp => {
-          user = resp.user;
+          return this[USER_LOAD](resp.user);
         })
-        .catch(err => {
-          this.message = err; 
-        });
-      await this[USER_LOAD](user)
         .then(() => {
+          this.status = SUCCESS;
           this.$router.push({ name: 'HourList' });
         })
         .catch(err => {
+          this.status = ERROR;
           this.message = err; 
         });
     }

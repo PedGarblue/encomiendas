@@ -44,7 +44,7 @@ export default {
     loadUser() {
       this[USER_LOAD]()
         .catch(err => {
-          this.err = err;
+          this.err = err.message;
         });
     },
     clearError(){

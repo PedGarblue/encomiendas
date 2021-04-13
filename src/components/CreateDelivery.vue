@@ -36,7 +36,11 @@
             </transition>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary margin-s-x" @click="nextStage">
+            <button 
+              class="btn btn-primary margin-s-x" 
+              :class="{ hidden: !allowContinue }"
+              @click="nextStage"
+            >
               Continuar
             </button>
             <button @click="close" class="btn btn-secondary margin-s-x">Cancelar</button>
@@ -116,6 +120,10 @@ export default {
   computed: {
     isOpen() {
       return this.stage !== STAGE_CLOSED;
+    },
+    allowContinue() {
+      const stagesWithoutCoutinue = [STAGE_REQUEST];
+      return !stagesWithoutCoutinue.includes(this.stage);
     },
     selectProducts() {
       return this.stage === STAGE_SELECT_PRODUCTS;
@@ -199,5 +207,8 @@ export default {
 button {
   margin: var(--small) 0;
   width: 100%;
+}
+button.hidden {
+  visibility: hidden;
 }
 </style>

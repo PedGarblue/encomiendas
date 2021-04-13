@@ -50,6 +50,10 @@ const routes = [
       authorize: ['admin'],
     }
   },
+  {
+    path: '*',
+    component: () => import(/* webpackChunkName: "notfound" */ '../views/NotFound.vue'),
+  }
 ];
 
 const router = new VueRouter({
